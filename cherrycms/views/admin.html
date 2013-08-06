@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ title }}</title>
+  </head>
+  <body>
+    <h1>ADMIN: {{ title }} </h1>
+
+    <ul>
+    {% for item in content %}
+      <li>
+          {{ item.id }} -- {{ item.type }}
+      </li>
+    {% endfor %}
+    </ul>
+
+
+
+
+  </body>
+</html>
