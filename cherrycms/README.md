@@ -7,13 +7,12 @@ A very lightweight CMS for your static sites.
 
 - clone the repo
 - `npm install`
-- `grunt`
 
 
 ## Dependencies
 
-- Nodejs
-- Gruntjs
+- NodeJS
+- NPM
 
 
 ## Usage
