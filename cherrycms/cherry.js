@@ -43,9 +43,19 @@ if ('development' == app.get('env')) {
   Render the main admin page
  */
 cherry.admin = function(req, res){
-  res.render('admin', { title: 'cherry cms', content: cherry.data });//
+  res.render('admin', { title: 'cherry cms', message: "Welcome", content: cherry.data });//
 };
 
+
+/*
+  update the values on a given page
+*/
+cherry.update = function(req, res){
+
+
+
+  res.render('admin', { title: 'cherry cms', message: "Updated", content: cherry.data });//
+};
 
 
 
@@ -67,9 +77,6 @@ cherry.findtargets = function(contents) {
 
     for (var i = 0; i < targets.length; i++) {
         var ch = targets[i].attribs['data-cherry'].split(":");
-
-        // console.log("targets", targets[i]);
-        // console.log("this", content_api[ch[0]](targets[i]));
         var item = {
             "id" : ch[1],
             "type" : ch[0]
@@ -106,6 +113,7 @@ cherry.pick = function() {
 // Define routes
 //
 app.get('/cherrycms', cherry.admin);
+app.post('/cherrycms/update', cherry.update);
 
 
 

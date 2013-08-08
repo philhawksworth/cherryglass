@@ -1,6 +1,6 @@
-# CherryCMS
+# Cherry CMS
 
-A very lightweight CMS for static sites
+A very lightweight CMS for your static sites.
 
 
 ## Installation

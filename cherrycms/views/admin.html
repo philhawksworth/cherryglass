@@ -6,6 +6,17 @@
   <body>
     <h1>ADMIN: {{ title }} </h1>
 
+    <p class="message">{{ message }}</p>
+
+    <form action="/update" method="post">
+    {% for item in content %}
+      {% if item.type == 'text' %}
+        <p><label for="{{ item.id }}">{{ item.id }}</label><input type="text" id="{{ item.id }}"></p>
+      {% endif %}
+    {% endfor %}
+    </form>
+
+    <hr>
     <ul>
     {% for item in content %}
       <li>
