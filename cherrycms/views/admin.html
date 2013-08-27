@@ -1,32 +1,29 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>{{ title }}</title>
-  </head>
-  <body>
-    <h1>ADMIN: {{ title }} </h1>
+   <head>
+      <title>{{ title }}</title>
+   </head>
+   <body>
+      <h1>ADMIN: {{ title }} </h1>
 
-    <p class="message">{{ message }}</p>
-
-    <form action="/update" method="post">
-    {% for item in content %}
-      {% if item.type == 'text' %}
-        <p><label for="{{ item.id }}">{{ item.id }}</label><input type="text" id="{{ item.id }}"></p>
-      {% endif %}
-    {% endfor %}
-    </form>
-
-    <hr>
-    <ul>
-    {% for item in content %}
-      <li>
-          {{ item.id }} -- {{ item.type }}
-      </li>
-    {% endfor %}
-    </ul>
+      <p class="message">{{ message }}</p>
 
 
+      {% for item in content %}
+      <h2><a href="">{{ item.pagetitle }}</a></h2>
+
+         {% for elem in item.cherries %}
+         <div>
+            {% if elem.type == 'text' %}
+            <label for="{{elem.id}}">{{elem.id}}: </label><input type="text" id="{{elem.id}}" value="{{elem.value}}" />
+            {% else %}
+            <p>elem: {{ elem.id }} - {{ elem.type }} </p>
+            {% endif %}
+         </div>
+         {% endfor %}
+
+      {% endfor %}
 
 
-  </body>
+   </body>
 </html>

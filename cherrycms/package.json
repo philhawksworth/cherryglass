@@ -6,7 +6,7 @@
   "dependencies": {
     "express": "3.3.4",
     "ejs": "*",
-    "cheerio": "~0.12.0",
+    "apricot": "*",
     "swig": "*",
     "consolidate": "*"
   },

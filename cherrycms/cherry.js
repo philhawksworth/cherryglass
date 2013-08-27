@@ -1,18 +1,17 @@
-
 var express = require('express'),
-    http = require('http'),
-    path = require('path'),
-    cheerio = require('cheerio'),
-    fs = require('fs'),
-    cons = require('consolidate'),
-    swig = require('swig');
+		http = require('http'),
+		path = require('path'),
+		cheerio = require('cheerio'),
+		fs = require('fs'),
+		cons = require('consolidate'),
+		swig = require('swig');
 
 var app = express();
 
 var cherry = {
-    data : [],
-    src_dir : __dirname + "/../src/",
-    site_dir : __dirname + "/../site/"
+		data : {},
+		src_dir : __dirname + "/../src/",
+		site_dir : __dirname + "/../site/"
 };
 
 
@@ -34,76 +33,90 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
 if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
+	app.use(express.errorHandler());
 }
 
 
+/*
+	Render the main admin page
+ */
+cherry.site = function(req, res){
+	res.send("Serve the site at: " + cherry.src_dir);
+};
+
+
 
 /*
-  Render the main admin page
+	Render the main admin page
  */
 cherry.admin = function(req, res){
-  res.render('admin', { title: 'cherry cms', message: "Welcome", content: cherry.data });//
+	res.render('admin', { title: 'cherry cms', message: "Welcome", content: cherry.data });
 };
 
 
 /*
-  update the values on a given page
+	update the values on a given page
 */
 cherry.update = function(req, res){
-
-
-
-  res.render('admin', { title: 'cherry cms', message: "Updated", content: cherry.data });//
+	res.render('admin', { title: 'cherry cms', message: "Updated", content: cherry.data });//
 };
 
 
 
+
+
 /*
-  Find the targets in the inspected files.
+	lodge an element in the model for management
  */
-cherry.findtargets = function(contents) {
-    var $ = cheerio.load(contents);
-    var targets = $("[data-cherry]");
-
-    var content_api = {
-        'text': function(el) { return el.children[0].data; },
-        'markdown': function(el) { return el.children[0].data; },
-        'img': function(el) { return el.src; }
-        // 'markdown': function(el) { return el.children[0].data; },
-
-    };
-
-
-    for (var i = 0; i < targets.length; i++) {
-        var ch = targets[i].attribs['data-cherry'].split(":");
-        var item = {
-            "id" : ch[1],
-            "type" : ch[0]
-        };
-        cherry.data.push(item);
-    }
-    console.log("data", cherry.data);
+cherry.lodge = function(file, title, type, id, value) {
+	if(!cherry.data[file]) {
+		cherry.data[file] = {"pagetitle": title, "cherries":[]};
+	}
+	cherry.data[file].cherries.push({
+		"id" : id,
+		"type" : type,
+		"value" : value
+	});
 };
 
 
 /*
-  Parse the src of the site and create the model, ready for use.
+	Parse the src of the site and create the model, ready for use.
  */
 cherry.pick = function() {
-  fs.readdir(cherry.src_dir, function(err, files) {
-      files.filter( function(file) {
-          return file.substr(-5) == '.html';
-      })
-      .forEach( function(file) {
-          // console.log(file);
-          fs.readFile(cherry.src_dir + file, 'utf-8', function(err, contents) {
-              if (err) throw err;
-              // console.log(contents);
-              cherry.findtargets(contents);
-          });
-      });
-  });
+
+	fs.readdir(cherry.src_dir, function(err, files) {
+
+		files.filter( function(file) {
+			return file.substr(-5) == '.html';
+		})
+		.forEach( function(file) {
+
+			fs.readFile(cherry.src_dir + file, 'utf-8', function(err, contents) {
+				if (err) throw err;
+
+				console.log("Reading",file,"...");
+				var $ = cheerio.load(contents);
+				var title = $('title').text();
+
+				// parse a data cherry and lodge it in the model.
+				$('[data-cherry]').each(function(i, elem) {
+					var cherrytag = $(this).attr('data-cherry').split(":");
+					cherry.lodge(
+						file,
+						title,
+						cherrytag[0],
+						cherrytag[1],
+						$(this).text()
+					);
+				});
+
+			});
+
+		});
+
+	});
+
 };
 
 
@@ -114,21 +127,22 @@ cherry.pick = function() {
 //
 app.get('/cherrycms', cherry.admin);
 app.post('/cherrycms/update', cherry.update);
+app.get('/', cherry.site); // TODO: Add wildcard routing for all other than /cherrycms/*
 
 
 
 
 /*
-  Let's get started
+	Let's get started
  */
 cherry.pick();
 
 
 /*
-  Spin up the server
+	Spin up the server
  */
 http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+	console.log('Express server listening on port ' + app.get('port'));
 });
 
 
