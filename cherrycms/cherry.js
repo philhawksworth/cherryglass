@@ -53,12 +53,11 @@ cherry.admin = function(req, res){
 	res.render('admin', { title: 'cherry cms', message: "Welcome", content: cherry.data });
 
 	ncp.limit = 16;
-
 	ncp(cherry.src_dir, cherry.site_dir, function (err) {
 		if (err) {
 			return console.error(err);
 		}
-		console.log('done!');
+		console.log('Site files copied');
 	});
 };
 
