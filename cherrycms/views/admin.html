@@ -9,20 +9,25 @@
       <p class="message">{{ message }}</p>
 
 
-      {% for item in content %}
-      <h2><a href="">{{ item.pagetitle }}</a></h2>
+      <form action="/cherrycms" method="post">
 
-         {% for elem in item.cherries %}
-         <div>
-            {% if elem.type == 'text' %}
-            <label for="{{elem.id}}">{{elem.id}}: </label><input type="text" id="{{elem.id}}" value="{{elem.value}}" />
-            {% else %}
-            <p>elem: {{ elem.id }} - {{ elem.type }} </p>
-            {% endif %}
-         </div>
-         {% endfor %}
+         {% for item in content %}
+         <h2><a href="">{{ item.pagetitle }}</a></h2>
+
+            {% for elem in item.cherries %}
+            <div>
+               {% if elem.type == 'text' %}
+               <label for="{{elem.id}}">{{elem.id}}: </label><input type="text" id="{{elem.id}}" value="{{elem.value}}" />
+               {% else %}
+               <p>elem: {{ elem.id }} - {{ elem.type }} </p>
+               {% endif %}
+            </div>
+            {% endfor %}
 
       {% endfor %}
+
+
+      </form>
 
 
    </body>

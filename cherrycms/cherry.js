@@ -4,7 +4,8 @@ var express = require('express'),
 		cheerio = require('cheerio'),
 		fs = require('fs'),
 		cons = require('consolidate'),
-		swig = require('swig');
+		swig = require('swig'),
+		ncp = require('ncp').ncp;
 
 var app = express();
 
@@ -38,12 +39,11 @@ if ('development' == app.get('env')) {
 
 
 /*
-	Render the main admin page
+	Render the resultant site.
  */
 cherry.site = function(req, res){
 	res.send("Serve the site at: " + cherry.src_dir);
 };
-
 
 
 /*
@@ -51,6 +51,15 @@ cherry.site = function(req, res){
  */
 cherry.admin = function(req, res){
 	res.render('admin', { title: 'cherry cms', message: "Welcome", content: cherry.data });
+
+	ncp.limit = 16;
+
+	ncp(cherry.src_dir, cherry.site_dir, function (err) {
+		if (err) {
+			return console.error(err);
+		}
+		console.log('done!');
+	});
 };
 
 
@@ -60,9 +69,6 @@ cherry.admin = function(req, res){
 cherry.update = function(req, res){
 	res.render('admin', { title: 'cherry cms', message: "Updated", content: cherry.data });//
 };
-
-
-
 
 
 /*
@@ -125,9 +131,10 @@ cherry.pick = function() {
 //
 // Define routes
 //
-app.get('/cherrycms', cherry.admin);
-app.post('/cherrycms/update', cherry.update);
-app.get('/', cherry.site); // TODO: Add wildcard routing for all other than /cherrycms/*
+// app.get('/', cherry.site); 				// TODO: Add wildcard routing for all other than /cherrycms/*
+app.get('/cherrycms', cherry.admin);  	// TODO: Add wildcard routing
+app.post('/cherrycms', cherry.update);	// TODO: Add wildcard routing
+
 
 
 
