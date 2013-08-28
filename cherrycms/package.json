@@ -8,8 +8,7 @@
     "ejs": "*",
     "apricot": "*",
     "swig": "*",
-    "consolidate": "*",
-    "ncp": "*"
+    "consolidate": "*"
   },
   "devDependencies": {},
   "engines": {

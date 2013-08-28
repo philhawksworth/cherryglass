@@ -4,16 +4,14 @@ var express = require('express'),
 		cheerio = require('cheerio'),
 		fs = require('fs'),
 		cons = require('consolidate'),
-		swig = require('swig'),
-		ncp = require('ncp').ncp;
+		swig = require('swig');
 
 var app = express();
 
-
 var cherry = {
-		data : {},
-		src_dir : __dirname + "/../src/",
-		site_dir : __dirname + "/../site/"
+	data : {},
+	src_dir : __dirname + "/../src/",
+	site_dir : __dirname + "/../site/"
 };
 
 
@@ -27,7 +25,7 @@ app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/static', express.static(__dirname + '/static'));
 
 swig.init({ root: __dirname + '/views' });
 
@@ -51,13 +49,13 @@ cherry.site = function(req, res){
 	Render the main admin page.
  */
 cherry.admin = function(req, res){
-	res.render('admin', { title: 'cherry cms', message: "Welcome", content: cherry.data });
+	res.render('admin', { title: 'CherryCMS', content: cherry.data });
 };
 
 
 
 /*
-	Render the form for a given page
+	Render the admin form for a given page
  */
 cherry.showDataForm = function(req, res){
 	res.render('page', { title: 'Cherry CMS', message: req.params.file, file: req.params.file, content: cherry.data });
@@ -82,6 +80,7 @@ cherry.contentSubmission = function(req, res){
 		);
 	}
 
+	// render a confirmation
 	res.render('page', { title: 'cherry cms', message: "Content saved", file: req.params.file, content: cherry.data });
 };
 
@@ -158,21 +157,6 @@ cherry.pick = function() {
  */
 cherry.generate = function(req, res){
 
-
-console.log("data: ", cherry.data );
-
-
-
-	// create a duplicate in the site directory ready to be manipulated
-	// ncp.limit = 16;
-	// ncp(cherry.src_dir, cherry.site_dir, function (err) {
-	// 	if (err) {
-	// 		return console.error(err);
-	// 	}
-	// 	console.log('Site files copied.');
-	// });
-
-
 	// make the substitutions
 	fs.readdir(cherry.src_dir, function(err, files) {
 
@@ -183,7 +167,6 @@ console.log("data: ", cherry.data );
 
 			fs.readFile(cherry.src_dir + file, 'utf-8', function(err, contents) {
 				if (err) throw err;
-
 				var $ = cheerio.load(contents);
 
 				// parse a data cherry and replace its content with that found in the model.
@@ -194,28 +177,17 @@ console.log("data: ", cherry.data );
 					$(this).text(data);
 					$(this).attr('data-cherry', null);
 				});
-
-				console.log("HTML", $.html());
-
-
 				fs.writeFile(cherry.site_dir + file, $.html(), function (err) {
 					if (err) throw err;
 					console.log(file, "saved.");
 				});
-
-
 			});
 
 		});
 
 	});
-
-
 	res.render('admin', { title: 'Cherry CMS', message: "Site created", content: cherry.data });
 };
-
-
-
 
 
 
@@ -226,11 +198,6 @@ app.get('/cherrycms', cherry.admin);
 app.get('/cherrycms/page/:file', cherry.showDataForm);
 app.post('/cherrycms/page/:file', cherry.contentSubmission);
 app.get('/cherrycms/generate', cherry.generate);
-
-app.get('/:file', cherry.site);	// TODO: Add wildcard routing for all other than /cherrycms/*
-
-
-
 
 
 /*

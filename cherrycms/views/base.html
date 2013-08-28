@@ -2,6 +2,7 @@
 <html>
    <head>
       <title>{{ title }}</title>
+      <link rel="stylesheet" href="/static/css/base.css">
    </head>
    <body>
       <header>
@@ -11,23 +12,25 @@
                <li><a href="/cherrycms/docs">Docs</a></li>
             </ul>
             <h2 class="breadcrumb">{% block breadcrumb %}{% endblock breadcrumb %}</h2>
-            <ul>
+            <p class="messagebar">{{ message }}</p>
+            <ul class="controls">
                <li><a href="/cherrycms">Cancel</a></li>
                <li><a href="">Save</a></li>
                <li><a href="/cherrycms/generate">Generate Site</a></li>
             </ul>
          </div>
-         <div class="messagebar">
-            {{ message }}
-         </div>
+
       </header>
-      <div class="sidebar">
-      {% block sidebar %}
-      {% endblock sidebar %}
-      </div>
-      <div class="content">
-      {% block content %}
-      {% endblock content %}
+
+      <div class="page">
+         <div class="sidebar">
+         {% block sidebar %}
+         {% endblock sidebar %}
+         </div>
+         <div class="content">
+         {% block content %}
+         {% endblock content %}
+         </div>
       </div>
    </body>
 </html>
