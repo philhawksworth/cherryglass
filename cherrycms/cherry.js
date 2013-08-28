@@ -60,17 +60,8 @@ cherry.admin = function(req, res){
 	Render the form for a given page
  */
 cherry.showDataForm = function(req, res){
-
-
-	console.log("DATA for this file: ",  cherry.data[req.params.file]);
-
 	res.render('page', { title: 'Cherry CMS', message: req.params.file, file: req.params.file, content: cherry.data[req.params.file] });
-
-
 };
-
-
-
 
 
 /*
@@ -95,10 +86,6 @@ cherry.contentSubmission = function(req, res){
 };
 
 
-
-
-
-
 /*
 	lodge an element in the model for management
  */
@@ -116,8 +103,17 @@ cherry.lodge = function(file, title, type, id, value) {
 };
 
 
+
 /*
-	Parse the src of the site and create the model, ready for use.
+	pluck the data for a cherry from the data store
+ */
+cherry.pluck = function(file, id) {
+	return cherry.data[file].cherries[id].value;
+};
+
+
+/*
+	Parse the src of the site.
  */
 cherry.pick = function() {
 
@@ -131,7 +127,7 @@ cherry.pick = function() {
 			fs.readFile(cherry.src_dir + file, 'utf-8', function(err, contents) {
 				if (err) throw err;
 
-				console.log("Reading",file,"...");
+				console.log("Reading",file);
 				var $ = cheerio.load(contents);
 				var title = $('title').text();
 
@@ -150,8 +146,22 @@ cherry.pick = function() {
 			});
 
 		});
-
 	});
+
+};
+
+
+
+
+/*
+	Generate the site from the source and the managed values.
+ */
+cherry.generate = function(req, res){
+
+
+console.log("data: ", cherry.data );
+
+
 
 	// create a duplicate in the site directory ready to be manipulated
 	ncp.limit = 16;
@@ -159,10 +169,46 @@ cherry.pick = function() {
 		if (err) {
 			return console.error(err);
 		}
-		console.log('...site files parsed and copied.');
+		console.log('Site files copied.');
 	});
 
+
+	// make the substitutions
+	fs.readdir(cherry.site_dir, function(err, files) {
+
+		files.filter( function(file) {
+			return file.substr(-5) == '.html';
+		})
+		.forEach( function(file) {
+
+			fs.readFile(cherry.site_dir + file, 'utf-8', function(err, contents) {
+				if (err) throw err;
+
+				var $ = cheerio.load(contents);
+
+				// parse a data cherry and replace its content with that found in the model.
+				$('[data-cherry]').each(function(i, elem) {
+					var cherrytag = $(this).attr('data-cherry').split(":");
+					var data = cherry.pluck(file, cherrytag[1]);
+					$(this).text(data);
+
+					console.log("element", $(this) );
+
+
+
+				});
+
+			});
+
+		});
+
+	});
+
+
+	res.render('admin', { title: 'Cherry CMS', message: "Site created", content: cherry.data });
 };
+
+
 
 
 
@@ -173,6 +219,7 @@ cherry.pick = function() {
 app.get('/cherrycms', cherry.admin);
 app.get('/cherrycms/page/:file', cherry.showDataForm);
 app.post('/cherrycms/page/:file', cherry.contentSubmission);
+app.get('/cherrycms/generate', cherry.generate);
 
 app.get('/', cherry.site);	// TODO: Add wildcard routing for all other than /cherrycms/*
 
