@@ -9,6 +9,7 @@ var express = require('express'),
 
 var app = express();
 
+
 var cherry = {
 		data : {},
 		src_dir : __dirname + "/../src/",
@@ -47,41 +48,71 @@ cherry.site = function(req, res){
 
 
 /*
-	Render the main admin page
+	Render the main admin page.
  */
 cherry.admin = function(req, res){
 	res.render('admin', { title: 'cherry cms', message: "Welcome", content: cherry.data });
-
-	ncp.limit = 16;
-	ncp(cherry.src_dir, cherry.site_dir, function (err) {
-		if (err) {
-			return console.error(err);
-		}
-		console.log('Site files copied');
-	});
 };
+
+
+
+/*
+	Render the form for a given page
+ */
+cherry.showDataForm = function(req, res){
+
+
+	console.log("DATA for this file: ",  cherry.data[req.params.file]);
+
+	res.render('page', { title: 'Cherry CMS', message: req.params.file, file: req.params.file, content: cherry.data[req.params.file] });
+
+
+};
+
+
+
 
 
 /*
 	update the values on a given page
 */
-cherry.update = function(req, res){
+cherry.contentSubmission = function(req, res){
+
+	// inspect the content posted from the form
+	for(var node in req.body) {
+		console.log("nodes", node, req.body[node] );
+		var cherrytag = node.split(":");
+		cherry.lodge(
+			req.params.file,
+			null,
+			cherrytag[0],
+			cherrytag[1],
+			req.body[node]
+		);
+	}
+
 	res.render('admin', { title: 'cherry cms', message: "Updated", content: cherry.data });//
 };
+
+
+
+
 
 
 /*
 	lodge an element in the model for management
  */
 cherry.lodge = function(file, title, type, id, value) {
+
+	// console.log("LODGE:", arguments );
+
 	if(!cherry.data[file]) {
-		cherry.data[file] = {"pagetitle": title, "cherries":[]};
+		cherry.data[file] = {"pagetitle": title, "cherries": {}};
 	}
-	cherry.data[file].cherries.push({
-		"id" : id,
+	cherry.data[file].cherries[id] = {
 		"type" : type,
 		"value" : value
-	});
+	};
 };
 
 
@@ -122,6 +153,15 @@ cherry.pick = function() {
 
 	});
 
+	// create a duplicate in the site directory ready to be manipulated
+	ncp.limit = 16;
+	ncp(cherry.src_dir, cherry.site_dir, function (err) {
+		if (err) {
+			return console.error(err);
+		}
+		console.log('...site files parsed and copied.');
+	});
+
 };
 
 
@@ -130,9 +170,11 @@ cherry.pick = function() {
 //
 // Define routes
 //
-// app.get('/', cherry.site); 				// TODO: Add wildcard routing for all other than /cherrycms/*
-app.get('/cherrycms', cherry.admin);  	// TODO: Add wildcard routing
-app.post('/cherrycms', cherry.update);	// TODO: Add wildcard routing
+app.get('/cherrycms', cherry.admin);
+app.get('/cherrycms/page/:file', cherry.showDataForm);
+app.post('/cherrycms/page/:file', cherry.contentSubmission);
+
+app.get('/', cherry.site);	// TODO: Add wildcard routing for all other than /cherrycms/*
 
 
 

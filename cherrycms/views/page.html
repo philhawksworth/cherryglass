@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>{{ title }}</title>
+   </head>
+   <body>
+      <a href="/cherrycms">home</a>
+      <hr>
+      <h1>ADMIN: {{ content.pagetitle }} </h1>
+
+
+
+      <form action="/cherrycms/page/{{ file }}" method="post">
+         {% for item in content.cherries %}
+         <div>
+         {% if item.type == 'text' %}
+            <label for="{{loop.key}}">{{loop.key}}: </label><input type="text" id="{{loop.key}}" name="{{item.type}}:{{loop.key}}" value="{{item.value}}" />
+         {% else %}
+            <p>item: {{ loop.key }} - {{ item.type }} </p>
+         {% endif %}
+         </div>
+         {% endfor %}
+         <input type="submit">
+      </form>
+
+
+   </body>
+</html>
