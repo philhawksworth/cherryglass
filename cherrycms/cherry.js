@@ -164,39 +164,45 @@ console.log("data: ", cherry.data );
 
 
 	// create a duplicate in the site directory ready to be manipulated
-	ncp.limit = 16;
-	ncp(cherry.src_dir, cherry.site_dir, function (err) {
-		if (err) {
-			return console.error(err);
-		}
-		console.log('Site files copied.');
-	});
+	// ncp.limit = 16;
+	// ncp(cherry.src_dir, cherry.site_dir, function (err) {
+	// 	if (err) {
+	// 		return console.error(err);
+	// 	}
+	// 	console.log('Site files copied.');
+	// });
 
 
 	// make the substitutions
-	fs.readdir(cherry.site_dir, function(err, files) {
+	fs.readdir(cherry.src_dir, function(err, files) {
 
 		files.filter( function(file) {
 			return file.substr(-5) == '.html';
 		})
 		.forEach( function(file) {
 
-			fs.readFile(cherry.site_dir + file, 'utf-8', function(err, contents) {
+			fs.readFile(cherry.src_dir + file, 'utf-8', function(err, contents) {
 				if (err) throw err;
 
 				var $ = cheerio.load(contents);
 
 				// parse a data cherry and replace its content with that found in the model.
+				// also remove the data-cherry attribute to eliminate any smells
 				$('[data-cherry]').each(function(i, elem) {
 					var cherrytag = $(this).attr('data-cherry').split(":");
 					var data = cherry.pluck(file, cherrytag[1]);
 					$(this).text(data);
-
-					console.log("element", $(this) );
-
-
-
+					$(this).attr('data-cherry', null);
 				});
+
+				console.log("HTML", $.html());
+
+
+				fs.writeFile(cherry.site_dir + file, $.html(), function (err) {
+					if (err) throw err;
+					console.log(file, "saved.");
+				});
+
 
 			});
 
