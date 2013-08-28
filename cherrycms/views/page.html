@@ -1,28 +1,29 @@
-<!DOCTYPE html>
-<html>
-   <head>
-      <title>{{ title }}</title>
-   </head>
-   <body>
-      <a href="/cherrycms">home</a>
-      <hr>
-      <h1>ADMIN: {{ content.pagetitle }} </h1>
+{% extends "base.html" %}
 
+   {% block breadcrumb %} {{ content.pagetitle }} {% endblock breadcrumb %}
 
+   {% block sidebar %}
+   <ul>
+      {% for item in content %}
+      <li><a href="/cherrycms/page/{{ loop.key }}">{{ item.pagetitle }}</a></li>
+      {% endfor %}
+   </ul>
+   {% endblock sidebar %}
 
-      <form action="/cherrycms/page/{{ file }}" method="post">
-         {% for item in content.cherries %}
-         <div>
-         {% if item.type == 'text' %}
-            <label for="{{loop.key}}">{{loop.key}}: </label><input type="text" id="{{loop.key}}" name="{{item.type}}:{{loop.key}}" value="{{item.value}}" />
-         {% else %}
-            <p>item: {{ loop.key }} - {{ item.type }} </p>
-         {% endif %}
-         </div>
-         {% endfor %}
-         <input type="submit">
-      </form>
+   {% block content %}
 
+   <form action="/cherrycms/page/{{ file }}" method="post">
 
-   </body>
-</html>
+      {% for item in content[file].cherries %}
+      <div>
+      {% if item.type == 'text' %}
+         <label for="{{loop.key}}">{{loop.key}}: </label><input type="text" id="{{loop.key}}" name="{{item.type}}:{{loop.key}}" value="{{item.value}}" />
+      {% else %}
+         <p>item: {{ loop.key }} - {{ item.type }} </p>
+      {% endif %}
+      </div>
+      {% endfor %}
+      <input type="submit">
+   </form>
+
+   {% endblock content %}

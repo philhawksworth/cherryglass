@@ -27,9 +27,9 @@ app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
-
-
 app.use(express.static(path.join(__dirname, 'public')));
+
+swig.init({ root: __dirname + '/views' });
 
 
 
@@ -60,7 +60,7 @@ cherry.admin = function(req, res){
 	Render the form for a given page
  */
 cherry.showDataForm = function(req, res){
-	res.render('page', { title: 'Cherry CMS', message: req.params.file, file: req.params.file, content: cherry.data[req.params.file] });
+	res.render('page', { title: 'Cherry CMS', message: req.params.file, file: req.params.file, content: cherry.data });
 };
 
 
@@ -82,7 +82,7 @@ cherry.contentSubmission = function(req, res){
 		);
 	}
 
-	res.render('admin', { title: 'cherry cms', message: "Updated", content: cherry.data });//
+	res.render('page', { title: 'cherry cms', message: "Content saved", file: req.params.file, content: cherry.data });
 };
 
 
@@ -227,7 +227,7 @@ app.get('/cherrycms/page/:file', cherry.showDataForm);
 app.post('/cherrycms/page/:file', cherry.contentSubmission);
 app.get('/cherrycms/generate', cherry.generate);
 
-app.get('/', cherry.site);	// TODO: Add wildcard routing for all other than /cherrycms/*
+app.get('/:file', cherry.site);	// TODO: Add wildcard routing for all other than /cherrycms/*
 
 
 

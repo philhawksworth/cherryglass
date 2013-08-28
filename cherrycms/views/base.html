@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>{{ title }}</title>
+   </head>
+   <body>
+      <header>
+         <h1><a href="/cherrycms">Cherry CMS</a></h1>
+         <div class="navbar">
+            <ul>
+               <li><a href="/cherrycms/docs">Docs</a></li>
+            </ul>
+            <h2 class="breadcrumb">{% block breadcrumb %}{% endblock breadcrumb %}</h2>
+            <ul>
+               <li><a href="/cherrycms">Cancel</a></li>
+               <li><a href="">Save</a></li>
+               <li><a href="/cherrycms/generate">Generate Site</a></li>
+            </ul>
+         </div>
+         <div class="messagebar">
+            {{ message }}
+         </div>
+      </header>
+      <div class="sidebar">
+      {% block sidebar %}
+      {% endblock sidebar %}
+      </div>
+      <div class="content">
+      {% block content %}
+      {% endblock content %}
+      </div>
+   </body>
+</html>

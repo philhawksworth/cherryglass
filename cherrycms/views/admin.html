@@ -1,24 +1,14 @@
-<!DOCTYPE html>
-<html>
-   <head>
-      <title>{{ title }}</title>
-   </head>
-   <body>
-      <h1>ADMIN: {{ title }} </h1>
+{% extends "base.html" %}
 
-      <p class="message">{{ message }}</p>
+{% block breadcrumb %} {{ title }} {% endblock breadcrumb %}
 
-
-      <ul>
-         {% for item in content %}
-         <li><a href="/cherrycms/page/{{ loop.key }}">{{ item.pagetitle }}</a></li>
-         {% endfor %}
-      </ul>
-
-      <hr>
-
-      <a href="/cherrycms/generate">generate site with managed content</a>
+{% block content %}
+    <ul>
+      {% for item in content %}
+      <li><a href="/cherrycms/page/{{ loop.key }}">{{ item.pagetitle }}</a></li>
+      {% endfor %}
+   </ul>
+{% endblock content %}
 
 
-   </body>
-</html>
+
