@@ -1,13 +1,30 @@
 {% extends "base.html" %}
 
-{% block breadcrumb %} {{ title }} {% endblock breadcrumb %}
+{% block breadcrumb %}{{ home }}{% endblock breadcrumb %}
 
-{% block content %}
+{% block sidebar %}
     <ul>
       {% for item in content %}
       <li><a href="/cherrycms/page/{{ loop.key }}">{{ item.pagetitle }}</a></li>
       {% endfor %}
    </ul>
+{% endblock sidebar %}
+
+{% block content %}
+
+    <h2>admin home page</h2>
+    <p>
+        some description and instroduction here.
+    </p>
+    <h3>Generate your content managment system</h3>
+    <p>To get started, we need to generate the CMS which will support your site. We can do that in one of two ways:</p>
+
+    <h4>From your HTML</h4>
+    <p>Have Cherry CMS inspect your HTML and look for areas which have been defined as content to manage.</p>
+
+    <h4>Import a CMS definition file</h4>
+    <p>Use an existing CMS definition file (in JSON format) to build the CMS admin view first.</p>
+
 {% endblock content %}
 
 

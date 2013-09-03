@@ -54,6 +54,7 @@ cherry.admin = function(req, res){
 
 
 
+
 /*
 	Render the admin form for a given page
  */
@@ -66,6 +67,7 @@ cherry.showDataForm = function(req, res){
 	update the values on a given page
 */
 cherry.contentSubmission = function(req, res){
+
 
 	// inspect the content posted from the form
 	for(var node in req.body) {
@@ -82,6 +84,11 @@ cherry.contentSubmission = function(req, res){
 
 	// render a confirmation
 	res.render('page', { title: 'cherry cms', message: "Content saved", file: req.params.file, content: cherry.data });
+
+
+	cherry.saveData();
+
+
 };
 
 
@@ -132,12 +139,13 @@ cherry.pick = function() {
 
 				// parse a data cherry and lodge it in the model.
 				$('[data-cherry]').each(function(i, elem) {
-					var cherrytag = $(this).attr('data-cherry').split(":");
+					var str = $(this).attr('data-cherry');
+					var cherrytag = JSON.parse(str);
 					cherry.lodge(
 						file,
 						title,
-						cherrytag[0],
-						cherrytag[1],
+						cherrytag.type,
+						cherrytag.id,
 						$(this).text()
 					);
 				});
@@ -186,7 +194,23 @@ cherry.generate = function(req, res){
 		});
 
 	});
-	res.render('admin', { title: 'Cherry CMS', message: "Site created", content: cherry.data });
+	res.render('generated', { title: 'Cherry CMS', message: "Site created"});
+};
+
+
+
+/*
+	Save the data as a JSON file
+ */
+cherry.saveData = function() {
+
+	var file = __dirname + "/data.json";
+	var data = JSON.stringify(cherry.data);
+	fs.writeFile(file, data, function (err) {
+		if (err) throw err;
+		console.log(file, "Data saved.");
+	});
+
 };
 
 

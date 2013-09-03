@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %}{{ home }}{% endblock breadcrumb %}
+
+{% block sidebar %}
+    <ul>
+      {% for item in content %}
+      <li><a href="/cherrycms/page/{{ loop.key }}">{{ item.pagetitle }}</a></li>
+      {% endfor %}
+   </ul>
+{% endblock sidebar %}
+
+{% block content %}
+
+    <h1>Documentation</h1>
+    <p>
+        Intructions on how to install, use and deploy BlackCherry CMS
+    </p>
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur, repellat quibusdam quam sequi delectus aliquam neque. Sequi, debitis consequatur ipsum laborum velit eum laboriosam error neque blanditiis nemo hic pariatur.
+    </p>
+
+{% endblock content %}
+
+
+

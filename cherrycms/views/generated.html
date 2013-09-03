@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+
+{% block sidebar %}
+    <ul>
+      {% for item in content %}
+      <li><a href="/cherrycms/page/{{ loop.key }}">{{ item.pagetitle }}</a></li>
+      {% endfor %}
+   </ul>
+{% endblock sidebar %}
+
+
+{% block content %}
+
+    <h2>Your site has been generated</h2>
+    <p>
+        Find your files, complete with the content from the CMS, in the <pre>site</pre> directory
+    </p>
+
+
+{% endblock content %}
+
+
+
