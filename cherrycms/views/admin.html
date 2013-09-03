@@ -2,13 +2,11 @@
 
 {% block breadcrumb %}{{ home }}{% endblock breadcrumb %}
 
-{% block sidebar %}
-    <ul>
+{% block pagelist %}
       {% for item in content %}
       <li><a href="/cherrycms/page/{{ loop.key }}">{{ item.pagetitle }}</a></li>
       {% endfor %}
-   </ul>
-{% endblock sidebar %}
+{% endblock pagelist %}
 
 {% block content %}
 

@@ -180,8 +180,9 @@ cherry.generate = function(req, res){
 				// parse a data cherry and replace its content with that found in the model.
 				// also remove the data-cherry attribute to eliminate any smells
 				$('[data-cherry]').each(function(i, elem) {
-					var cherrytag = $(this).attr('data-cherry').split(":");
-					var data = cherry.pluck(file, cherrytag[1]);
+
+					var cherrytag = JSON.parse($(this).attr('data-cherry'));
+					var data = cherry.pluck(file, cherrytag.id);
 					$(this).text(data);
 					$(this).attr('data-cherry', null);
 				});
@@ -194,7 +195,7 @@ cherry.generate = function(req, res){
 		});
 
 	});
-	res.render('generated', { title: 'Cherry CMS', message: "Site created"});
+	res.render('generated', { title: 'Cherry CMS', message: "Site created", content: cherry.data });
 };
 
 

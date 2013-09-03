@@ -1,61 +1,82 @@
+
 <!DOCTYPE html>
-<html>
-   <head>
-      <title>{{ title }}</title>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link rel="stylesheet" href="/static/css/bootstrap.min.css">
-      <link rel="stylesheet" href="/static/css/glasscherry.css">
-   </head>
-   <body>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>GlassCherry CMS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+
+      @media (max-width: 980px) {
+        /* Enable use of floated navbar text */
+        .navbar-text.pull-right {
+          float: none;
+          padding-left: 5px;
+          padding-right: 5px;
+        }
+      }
+    </style>
+  <link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet">
+  </head>
+  <body>
 
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid">
-          <a class="brand" href="/cherrycms">GlassCherry CMS</a>
-          <div class="nav-collapse collapse">
-            <p class="navbar-text pull-right">
-              <a href="/cherrycms/generate" class="navbar-link">Generate site</a>
-            </p>
+          <a class="brand" href="#">GlassCherry CMS</a>
             <ul class="nav">
-              <li><a href="/docs">Docs</a></li>
-              <li><a href="/help">Help</a></li>
+              <li><a href="/cherrycms/docs">Docs</a></li>
+              <li><a href="http://glasscherrycms.com">CMS Hosting</a></li>
             </ul>
-          </div><!--/.nav-collapse -->
         </div>
       </div>
     </div>
 
- {#
- <div class="breadcrumb">{% block breadcrumb %}{% endblock breadcrumb %}</div>
-   <p class="messagebar">{{ message }}</p>
- #}
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span3 ">
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+              <li class="nav-header">Tools</li>
+              <li><a href="/cherrycms">Admin home</a></li>
+              <li><a href="/cherrycms">Syntax cheatsheet</a></li>
+              <li><a href="/cherrycms/generate">Generate the site</a></li>
 
-       <div class="row">
-         <div class="span3 bs-docs-sidebar">
-           <ul class="nav nav-list bs-docs-sidenav">
-             <li><a href="#download-bootstrap"><i class="icon-chevron-right"></i> Download</a></li>
-             <li><a href="#file-structure"><i class="icon-chevron-right"></i> File structure</a></li>
-             <li><a href="#contents"><i class="icon-chevron-right"></i> What's included</a></li>
-             <li><a href="#html-template"><i class="icon-chevron-right"></i> HTML template</a></li>
-             <li><a href="#examples"><i class="icon-chevron-right"></i> Examples</a></li>
-             <li><a href="#what-next"><i class="icon-chevron-right"></i> What next?</a></li>
-           </ul>
+              <li class="nav-header">Site pages</li>
+              {% block pagelist %}
+              {% endblock pagelist %}
 
-         {% block sidebar %}
-         {% endblock sidebar %}
+            </ul>
+          </div><!--/.well -->
+        </div><!--/span-->
 
-         </div>
-         <div class="span9">
 
+        {% block hero %}{% endblock hero %}
+
+        <div class="span9">
             {% block content %}
             {% endblock content %}
-
-         </div>
-
-      </div>
+        </div><!--/span-->
 
 
+      </div><!--/row-->
 
-      <script src="/static/js/bootstrap.min.js"></script>
-   </body>
+      <hr>
+
+      <footer>
+        <p>GlassCherry CMS - version 0.0.1</p>
+      </footer>
+
+    </div><!--/.fluid-container-->
+    <script src="/static/js/bootstrap.min.js"></script>
+
+  </body>
 </html>
