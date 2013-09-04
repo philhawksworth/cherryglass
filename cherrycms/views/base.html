@@ -25,13 +25,14 @@
       }
     </style>
   <link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet">
+  <link href="/static/css/glasscherry.css" rel="stylesheet">
   </head>
   <body>
 
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid">
-          <a class="brand" href="#">GlassCherry CMS</a>
+          <a class="brand" href="/cherrycms">GlassCherry CMS</a>
             <ul class="nav">
               <li><a href="/cherrycms/docs">Docs</a></li>
               <li><a href="http://glasscherrycms.com">CMS Hosting</a></li>
@@ -47,7 +48,7 @@
             <ul class="nav nav-list">
               <li class="nav-header">Tools</li>
               <li><a href="/cherrycms">Admin home</a></li>
-              <li><a href="/cherrycms">Syntax cheatsheet</a></li>
+              <li><a href="/cherrycms/docs#syntax">Syntax cheatsheet</a></li>
               <li><a href="/cherrycms/generate">Generate the site</a></li>
 
               <li class="nav-header">Site pages</li>
@@ -62,6 +63,18 @@
         {% block hero %}{% endblock hero %}
 
         <div class="span9">
+
+          {% if message == 'generated' %}
+            {% include "includes/generated.html" %}
+          {% else if message == 'saved' %}
+            {% include "includes/datasaved.html" %}
+          {% else if message == 'exported' %}
+            {% include "includes/jsonified.html" %}
+          {% endif %}
+
+
+            {% block message %}{% endblock message %}
+
             {% block content %}
             {% endblock content %}
         </div><!--/span-->

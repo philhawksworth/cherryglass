@@ -53,6 +53,13 @@ cherry.admin = function(req, res){
 };
 
 
+/*
+	Render the main admin page.
+ */
+cherry.docs = function(req, res){
+	res.render('docs');
+};
+
 
 
 /*
@@ -83,7 +90,7 @@ cherry.contentSubmission = function(req, res){
 	}
 
 	// render a confirmation
-	res.render('page', { title: 'cherry cms', message: "Content saved", file: req.params.file, content: cherry.data });
+	res.render('page', { title: 'cherry cms', message: "saved", file: req.params.file, content: cherry.data });
 
 
 	cherry.saveData();
@@ -195,7 +202,7 @@ cherry.generate = function(req, res){
 		});
 
 	});
-	res.render('generated', { title: 'Cherry CMS', message: "Site created", content: cherry.data });
+	res.render('page', { title: 'Cherry CMS', message: 'generated', content: cherry.data });
 };
 
 
@@ -223,6 +230,7 @@ app.get('/cherrycms', cherry.admin);
 app.get('/cherrycms/page/:file', cherry.showDataForm);
 app.post('/cherrycms/page/:file', cherry.contentSubmission);
 app.get('/cherrycms/generate', cherry.generate);
+app.get('/cherrycms/docs', cherry.docs);
 
 
 /*
