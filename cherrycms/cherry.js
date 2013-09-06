@@ -4,7 +4,8 @@ var express = require('express'),
 		cheerio = require('cheerio'),
 		fs = require('fs'),
 		cons = require('consolidate'),
-		swig = require('swig');
+    swig = require('swig'),
+		extend = require('extend');
 
 var app = express();
 
@@ -65,7 +66,6 @@ cherry.docs = function(req, res){
 };
 
 
-
 /*
 	Render the admin form for a given page
  */
@@ -79,46 +79,49 @@ cherry.showDataForm = function(req, res){
 */
 cherry.contentSubmission = function(req, res){
 
-
 	// inspect the content posted from the form
 	for(var node in req.body) {
 		console.log("nodes", node, req.body[node] );
 		var cherrytag = node.split(":");
-		cherry.lodge(
-			req.params.file,
-			null,
-			cherrytag[0],
-			cherrytag[1],
-			req.body[node]
-		);
+    cherry.update(req.params.file, cherrytag[1], req.body[node]);
 	}
 
 	// render a confirmation
 	res.render('page', { title: 'cherry cms', message: "saved", file: req.params.file, content: cherry.data.files });
-
-
-	cherry.saveData();
-
-
 };
 
 
 /*
 	lodge an element in the model for management
  */
-cherry.lodge = function(file, title, type, id, value) {
+cherry.lodge = function(file, title, data) {
 
-	// console.log("LODGE:", arguments );
+  // Defaults to extend.
+  var obj = {
+     "type": null,
+     "id": null,
+     "value": "",
+     "label": null,
+     "help": null
+  };
+  obj = extend(obj, data);
 
 	if(!cherry.data.files[file]) {
 		cherry.data.files[file] = {"pagetitle": title, "cherries": {}};
 	}
-	cherry.data.files[file].cherries[id] = {
-		"type" : type,
-		"value" : value
-	};
+
+  cherry.data.files[file].cherries[obj.id] = obj;
+  cherry.saveData();
 };
 
+
+/*
+  update the stored value of a data cherry
+ */
+cherry.update = function(file, id, value) {
+  cherry.data.files[file].cherries[id].value = value;
+  cherry.saveData();
+};
 
 
 /*
@@ -152,23 +155,14 @@ cherry.pick = function() {
 				$('[data-cherry]').each(function(i, elem) {
 					var str = $(this).attr('data-cherry');
 					var cherrytag = JSON.parse(str);
-					cherry.lodge(
-						file,
-						title,
-						cherrytag.type,
-						cherrytag.id,
-						$(this).text()
-					);
+          var cherry_obj = extend(cherrytag, {"value": $(this).text()});
+          cherry.lodge(file, title, cherry_obj);
 				});
 
 			});
-
 		});
 	});
-
 };
-
-
 
 
 /*
@@ -191,7 +185,6 @@ cherry.generate = function(req, res){
 				// parse a data cherry and replace its content with that found in the model.
 				// also remove the data-cherry attribute to eliminate any smells
 				$('[data-cherry]').each(function(i, elem) {
-
 					var cherrytag = JSON.parse($(this).attr('data-cherry'));
 					var data = cherry.pluck(file, cherrytag.id);
 					$(this).text(data);
@@ -224,7 +217,6 @@ cherry.saveData = function() {
 	});
 
 };
-
 
 
 //
