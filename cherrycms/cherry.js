@@ -9,11 +9,14 @@ var express = require('express'),
 var app = express();
 
 var cherry = {
-	data : {},
-	src_dir : __dirname + "/../src/",
-	site_dir : __dirname + "/../site/"
+  data : {
+    config : {
+      src_dir : __dirname + "/../src/",
+      site_dir : __dirname + "/../site/"
+    },
+    files : {}
+  }
 };
-
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -26,7 +29,7 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
 app.use('/static', express.static(__dirname + '/static'));
-app.use('/', express.static(__dirname + '/../site'));
+app.use('/', express.static(cherry.data.config.site_dir));
 
 swig.init({ root: __dirname + '/views' });
 
@@ -50,7 +53,7 @@ cherry.site = function(req, res){
 	Render the main admin page.
  */
 cherry.admin = function(req, res){
-	res.render('admin', { title: 'CherryCMS', content: cherry.data });
+	res.render('admin', { title: 'CherryCMS', content: cherry.data.files });
 };
 
 
@@ -67,7 +70,7 @@ cherry.docs = function(req, res){
 	Render the admin form for a given page
  */
 cherry.showDataForm = function(req, res){
-	res.render('page', { title: 'Cherry CMS', message: req.params.file, file: req.params.file, content: cherry.data });
+	res.render('page', { title: 'Cherry CMS', message: req.params.file, file: req.params.file, content: cherry.data.files });
 };
 
 
@@ -91,7 +94,7 @@ cherry.contentSubmission = function(req, res){
 	}
 
 	// render a confirmation
-	res.render('page', { title: 'cherry cms', message: "saved", file: req.params.file, content: cherry.data });
+	res.render('page', { title: 'cherry cms', message: "saved", file: req.params.file, content: cherry.data.files });
 
 
 	cherry.saveData();
@@ -107,10 +110,10 @@ cherry.lodge = function(file, title, type, id, value) {
 
 	// console.log("LODGE:", arguments );
 
-	if(!cherry.data[file]) {
-		cherry.data[file] = {"pagetitle": title, "cherries": {}};
+	if(!cherry.data.files[file]) {
+		cherry.data.files[file] = {"pagetitle": title, "cherries": {}};
 	}
-	cherry.data[file].cherries[id] = {
+	cherry.data.files[file].cherries[id] = {
 		"type" : type,
 		"value" : value
 	};
@@ -122,7 +125,7 @@ cherry.lodge = function(file, title, type, id, value) {
 	pluck the data for a cherry from the data store
  */
 cherry.pluck = function(file, id) {
-	return cherry.data[file].cherries[id].value;
+	return cherry.data.files[file].cherries[id].value;
 };
 
 
@@ -131,14 +134,14 @@ cherry.pluck = function(file, id) {
  */
 cherry.pick = function() {
 
-	fs.readdir(cherry.src_dir, function(err, files) {
+	fs.readdir(cherry.data.config.src_dir, function(err, files) {
 
 		files.filter( function(file) {
 			return file.substr(-5) == '.html';
 		})
 		.forEach( function(file) {
 
-			fs.readFile(cherry.src_dir + file, 'utf-8', function(err, contents) {
+			fs.readFile(cherry.data.config.src_dir + file, 'utf-8', function(err, contents) {
 				if (err) throw err;
 
 				console.log("Cherry-picking content from",file);
@@ -174,14 +177,14 @@ cherry.pick = function() {
 cherry.generate = function(req, res){
 
 	// make the substitutions
-	fs.readdir(cherry.src_dir, function(err, files) {
+	fs.readdir(cherry.data.config.src_dir, function(err, files) {
 
 		files.filter( function(file) {
 			return file.substr(-5) == '.html';
 		})
 		.forEach( function(file) {
 
-			fs.readFile(cherry.src_dir + file, 'utf-8', function(err, contents) {
+			fs.readFile(cherry.data.config.src_dir + file, 'utf-8', function(err, contents) {
 				if (err) throw err;
 				var $ = cheerio.load(contents);
 
@@ -194,7 +197,7 @@ cherry.generate = function(req, res){
 					$(this).text(data);
 					$(this).attr('data-cherry', null);
 				});
-				fs.writeFile(cherry.site_dir + file, $.html(), function (err) {
+				fs.writeFile(cherry.data.config.site_dir + file, $.html(), function (err) {
 					if (err) throw err;
 					console.log(file, "saved.");
 				});
@@ -203,7 +206,7 @@ cherry.generate = function(req, res){
 		});
 
 	});
-	res.render('page', { title: 'Cherry CMS', message: 'generated', content: cherry.data });
+  res.render('page', { title: 'Cherry cms', message: "generated", file: req.params.file, content: cherry.data.files });
 };
 
 
