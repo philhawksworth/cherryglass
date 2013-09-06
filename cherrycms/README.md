@@ -22,15 +22,15 @@ CherryCMS generates an admin site for you to manage the content in specific area
 Different types of content types are available to specify in this way. For example:
 
 <table>
-    <tr>
-        <td>`data-cherry="text:Page-title"`</td><td>Plain text field, identified as Page title</td>
-    </tr>
-    <tr>
-        <td>`data-cherry="markdown:Intro"`</td><td>A text field capable of interpreting markdown, identified as Intro</td>
-    </tr>
-    <tr>
-        <td>`data-cherry="img:Hero"`</td><td>An image asset, identified on the page as Hero</td>
-    </tr>
+  <tr>
+    <td>`data-cherry="text:Page-title"`</td><td>Plain text field, identified as Page title</td>
+  </tr>
+  <tr>
+    <td>`data-cherry="markdown:Intro"`</td><td>A text field capable of interpreting markdown, identified as Intro</td>
+  </tr>
+  <tr>
+    <td>`data-cherry="img:Hero"`</td><td>An image asset, identified on the page as Hero</td>
+  </tr>
 </table>
 
 

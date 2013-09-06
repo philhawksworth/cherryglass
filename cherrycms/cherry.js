@@ -26,6 +26,7 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
 app.use('/static', express.static(__dirname + '/static'));
+app.use('/', express.static(__dirname + '/../site'));
 
 swig.init({ root: __dirname + '/views' });
 
@@ -140,7 +141,7 @@ cherry.pick = function() {
 			fs.readFile(cherry.src_dir + file, 'utf-8', function(err, contents) {
 				if (err) throw err;
 
-				console.log("Reading",file);
+				console.log("Cherry-picking content from",file);
 				var $ = cheerio.load(contents);
 				var title = $('title').text();
 
