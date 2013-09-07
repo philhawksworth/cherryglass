@@ -20,8 +20,15 @@
       {% for item in content[file].cherries %}
 
          {% if item.type == 'text' %}
-            <label for="{{loop.key}}">{{loop.key}} </label>
+          {% if item.label %}
+            <label for="{{loop.key}}">{{item.label}}</label>
+          {% else %}
+            <label for="{{loop.key}}">{{loop.key}}</label>
+          {% endif %}
             <input type="text" id="{{loop.key}}" name="{{item.type}}:{{loop.key}}" value="{{item.value}}" />
+          {% if item.help %}
+            <p class="help">{{item.help}}</p>
+          {% endif %}
          {% endif %}
 
       {% endfor %}
