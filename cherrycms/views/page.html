@@ -25,14 +25,25 @@
           {% else %}
             <label for="{{loop.key}}">{{loop.key}}</label>
           {% endif %}
-            <input type="text" id="{{loop.key}}" name="{{item.type}}:{{loop.key}}" value="{{item.value}}" />
+            <input type="text" id="{{loop.key}}" name="{{item.type}}:{{loop.key}}" value="{{item.value}}" class="input-xxlarge" />
           {% if item.help %}
-            <p class="help">{{item.help}}</p>
+            <span class="help-block">{{item.help}}</span>
+          {% endif %}
+         {% endif %}
+
+        {% if item.type == 'markdown' %}
+          {% if item.label %}
+            <label for="{{loop.key}}">{{item.label}}</label>
+          {% else %}
+            <label for="{{loop.key}}">{{loop.key}}</label>
+          {% endif %}
+            <textarea cols="30" rows="10" id="{{loop.key}}" name="{{item.type}}:{{loop.key}}" class="input-xxlarge" >{{item.value}}</textarea>
+          {% if item.help %}
+            <span class="help-block">{{item.help}}</span>
           {% endif %}
          {% endif %}
 
       {% endfor %}
-
 
       <p>
          <div class="btn-group">

@@ -2,3 +2,13 @@ dd {
     margin-bottom:1em;
 }
 
+
+label {
+  margin-top: 1.5em;
+}
+
+.help-block {
+  font-size: 0.9em;
+  margin: 0em 2em 1em 0.5em;
+  color: #999;
+}

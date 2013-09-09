@@ -5,8 +5,10 @@
 </head>
 <body>
   <header>
-    <!-- plain text target wth the cherry admin title: page-title -->
+    <!-- plain text target wth the cherry admin title: page-title. An optional 'label' field overrides the default 'id' label -->
     <h2 data-cherry='{"id": "display-title", "type": "text", "label": "Page title"}'>header title</h2>
+
+    <!-- Another text field, but with a helpful commetent to display in the CMS -->
     <p data-cherry='{"id": "page-subtitle", "type": "text", "help": "Some descriptive help text. Perhaps sepcifying the kind of content or advised word count for this field."}'>sub title content</p>
   </header>
 
@@ -28,6 +30,7 @@
       <a href="foo" data-cherry='{"type": "link", "id": "TBD"}'>bar</a>
     </li>
   </ul>
+
 
   <footer>
     <p data-cherry='{"id": "footer-copy", "type": "text"}'>footer text</p>

@@ -9,7 +9,8 @@
     "apricot": "*",
     "swig": "*",
     "consolidate": "*",
-    "extend": "*"
+    "extend": "*",
+    "marked": "*"
   },
   "devDependencies": {},
   "engines": {

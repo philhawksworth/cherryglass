@@ -5,6 +5,7 @@ var express = require('express'),
 		fs = require('fs'),
 		cons = require('consolidate'),
     swig = require('swig'),
+    marked = require('marked'),
 		extend = require('extend');
 
 var app = express();
@@ -40,6 +41,26 @@ swig.init({ root: __dirname + '/views' });
 if ('development' == app.get('env')) {
 	app.use(express.errorHandler());
 }
+
+// configure the markdown options
+marked.setOptions({
+  gfm: true,
+  // highlight: function (code, lang, callback) {
+  //   pygmentize({ lang: lang, format: 'html' }, code, function (err, result) {
+  //     if (err) return callback(err);
+  //     callback(null, result.toString());
+  //   });
+  // },
+  tables: true,
+  breaks: true,
+  pedantic: false,
+  sanitize: true,
+  smartLists: true,
+  smartypants: false,
+  langPrefix: 'lang-'
+});
+
+
 
 
 /*
@@ -187,7 +208,18 @@ cherry.generate = function(req, res){
 				$('[data-cherry]').each(function(i, elem) {
 					var cherrytag = JSON.parse($(this).attr('data-cherry'));
 					var data = cherry.pluck(file, cherrytag.id);
-					$(this).text(data);
+
+          console.log("templating... ", cherrytag.type );
+
+
+          // markdown or text
+          if(cherrytag.type == 'markdown') {
+            data = marked(data);
+            $(this).html(data);
+          } else {
+            $(this).text(data);
+          }
+
 					$(this).attr('data-cherry', null);
 				});
 				fs.writeFile(cherry.data.config.site_dir + file, $.html(), function (err) {
