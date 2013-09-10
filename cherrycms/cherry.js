@@ -33,6 +33,10 @@ app.use(app.router);
 app.use('/static', express.static(__dirname + '/static'));
 app.use('/', express.static(cherry.data.config.site_dir));
 
+
+console.log("SWIG", swig);
+
+
 swig.init({ root: __dirname + '/views' });
 
 
