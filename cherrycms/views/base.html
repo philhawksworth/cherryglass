@@ -70,6 +70,10 @@
             {% include "includes/datasaved.html" %}
           {% else if message == 'exported' %}
             {% include "includes/jsonified.html" %}
+          {% else if message == 'ingested' %}
+            {% include "includes/ingested.html" %}
+          {% else if message == 'ingest-error' %}
+            {% include "includes/ingest-error.html" %}
           {% endif %}
 
 

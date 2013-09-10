@@ -14,7 +14,8 @@ var cherry = {
   data : {
     config : {
       src_dir : __dirname + "/../src/",
-      site_dir : __dirname + "/../site/"
+      site_dir : __dirname + "/../site/",
+      data_file : __dirname + "/data.json"
     },
     files : {}
   }
@@ -32,10 +33,6 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use('/static', express.static(__dirname + '/static'));
 app.use('/', express.static(cherry.data.config.site_dir));
-
-
-console.log("SWIG", swig);
-
 
 swig.init({ root: __dirname + '/views' });
 
@@ -157,6 +154,38 @@ cherry.pluck = function(file, id) {
 };
 
 
+
+
+
+/*
+  Generate the CMS Admin by ingesting the HTML or JSOM file
+*/
+cherry.ingest = function(req, res){
+
+  var message = "ingested";
+
+  if (req.body['html']) {
+    console.log("Generating CMS from site source....");
+    cherry.pick();
+  } else {
+    fs.readFile(cherry.data.config.data_file, 'utf-8', function(err, contents) {
+      if(err) {
+        var message = "ingest-error";
+        console.log("There was a problem ingesting you data.json file.");
+        return;
+      }
+      console.log("Using data.json as the source for the CMS.");
+    });
+
+  }
+
+  // render a confirmation
+  res.render('admin', { title: 'cherry cms', message: message, content: cherry.data.files });
+};
+
+
+
+
 /*
 	Parse the src of the site.
  */
@@ -263,12 +292,13 @@ app.get('/cherrycms/page/:file', cherry.showDataForm);
 app.post('/cherrycms/page/:file', cherry.contentSubmission);
 app.get('/cherrycms/generate', cherry.generate);
 app.get('/cherrycms/docs', cherry.docs);
+app.post('/cherrycms/ingest', cherry.ingest);
 
 
 /*
 	Let's get started
  */
-cherry.pick();
+// cherry.pick();
 
 
 /*

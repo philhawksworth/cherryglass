@@ -17,11 +17,17 @@
     <h3>Generate your content managment system</h3>
     <p>To get started, we need to generate the CMS which will support your site. We can do that in one of two ways:</p>
 
+
     <h4>From your HTML</h4>
     <p>Have Cherry CMS inspect your HTML and look for areas which have been defined as content to manage.</p>
 
     <h4>Import a CMS definition file</h4>
     <p>Use an existing CMS definition file (in JSON format) to build the CMS admin view first.</p>
+
+    <form action="/cherrycms/ingest" method="post">
+      <input type="submit" class="btn" name="html" value="Create the CMS from your HTML" />
+      <input type="submit" class="btn" name="json" value="Create the CMS from a JSON file" />
+    </form>
 
 {% endblock content %}
 
