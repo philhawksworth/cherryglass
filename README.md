@@ -3,8 +3,6 @@ cherrycms
 
 A very light CMS for adding manageable content to your static sites.
 
-[Release notes](https://github.com/philhawksworth/cherrycms/wiki/Release-notes) availble on the wiki.
-
 
 ## Installation
 
@@ -24,5 +22,6 @@ A very light CMS for adding manageable content to your static sites.
 
 ## Development
 
-A backlog of thoughts and features is on [trello](https://trello.com/b/N7FFSlle/cherry-cms)
+- A backlog of thoughts and features is on [trello](https://trello.com/b/N7FFSlle/cherry-cms)
+- [Release notes](https://github.com/philhawksworth/cherrycms/wiki/Release-notes) availble on the wiki.
 
