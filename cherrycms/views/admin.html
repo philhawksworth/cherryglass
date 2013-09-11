@@ -3,30 +3,41 @@
 {% block breadcrumb %}{{ home }}{% endblock breadcrumb %}
 
 {% block pagelist %}
-      {% for item in content %}
+      {% for item in content.files %}
       <li><a href="/cherrycms/page/{{ loop.key }}">{{ item.pagetitle }}</a></li>
       {% endfor %}
 {% endblock pagelist %}
 
 {% block content %}
 
-    <h2>admin home page</h2>
+    <h2>Welcome to your GlassCherry CMS</h2>
+
+    <h3>Let's get started</h3>
     <p>
-        some description and instroduction here.
+        GlassCherry generates a static site from your existing site source code and lets you add elements of managed content.
     </p>
-    <h3>Generate your content managment system</h3>
-    <p>To get started, we need to generate the CMS which will support your site. We can do that in one of two ways:</p>
 
+    <hr>
 
-    <h4>From your HTML</h4>
-    <p>Have Cherry CMS inspect your HTML and look for areas which have been defined as content to manage.</p>
-
-    <h4>Import a CMS definition file</h4>
-    <p>Use an existing CMS definition file (in JSON format) to build the CMS admin view first.</p>
-
-    <form action="/cherrycms/ingest" method="post">
-      <input type="submit" class="btn" name="html" value="Create the CMS from your HTML" />
-      <input type="submit" class="btn" name="json" value="Create the CMS from a JSON file" />
+    <form action="/cherrycms/ingest" method="post" class="form-inline">
+      <fieldset>
+        <h4>Where should the output go?</h4>
+        <label for="output">output directory</label>
+        <input type="text" name="output" id="output" value="{{ content.config.site_dir }}" />
+      </fieldset>
+      <hr>
+      <fieldset>
+        <h4>Either create the CMS by looking at your HTML</h4>
+        <label for="source">Site source directory</label>
+        <input type="text" name="source" id="source" value="{{ content.config.src_dir }}" />
+       <input type="submit" class="btn btn-inverse" name="html" value="Create the CMS from your HTML" />
+      </fieldset>
+      <fieldset>
+        <h4>Or create the CMS by importing a saved JSON definition file</h4>
+        <label for="datafile">Location of your data.json file</label>
+        <input type="text" name="datafile" id="datafile" value="{{ content.config.data_file }}" />
+        <input type="submit" class="btn btn-inverse" name="json" value="Create the CMS from a JSON file" />
+      </fieldset>
     </form>
 
 {% endblock content %}

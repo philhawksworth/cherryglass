@@ -12,10 +12,11 @@ var app = express();
 
 var cherry = {
   data : {
+    // defualts.
     config : {
-      src_dir : __dirname + "/../src/",
-      site_dir : __dirname + "/../site/",
-      data_file : __dirname + "/data.json"
+      src_dir : "/../src/",
+      site_dir : "/../site/",
+      data_file : "/data.json"
     },
     files : {}
   }
@@ -32,7 +33,7 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
 app.use('/static', express.static(__dirname + '/static'));
-app.use('/', express.static(cherry.data.config.site_dir));
+app.use('/', express.static(__dirname + cherry.data.config.site_dir));
 
 swig.init({ root: __dirname + '/views' });
 
@@ -46,12 +47,6 @@ if ('development' == app.get('env')) {
 // configure the markdown options
 marked.setOptions({
   gfm: true,
-  // highlight: function (code, lang, callback) {
-  //   pygmentize({ lang: lang, format: 'html' }, code, function (err, result) {
-  //     if (err) return callback(err);
-  //     callback(null, result.toString());
-  //   });
-  // },
   tables: true,
   breaks: true,
   pedantic: false,
@@ -62,13 +57,11 @@ marked.setOptions({
 });
 
 
-
-
 /*
 	Render the resultant site.
  */
 cherry.site = function(req, res){
-	res.send("Serve the site at: " + cherry.src_dir);
+	res.send("Serve the site at: " + __dirname + cherry.src_dir);
 };
 
 
@@ -76,7 +69,7 @@ cherry.site = function(req, res){
 	Render the main admin page.
  */
 cherry.admin = function(req, res){
-	res.render('admin', { title: 'CherryCMS', content: cherry.data.files });
+	res.render('admin', { title: 'CherryCMS', content: cherry.data });
 };
 
 
@@ -168,7 +161,7 @@ cherry.ingest = function(req, res){
     console.log("Generating CMS from site source....");
     cherry.pick();
   } else {
-    fs.readFile(cherry.data.config.data_file, 'utf-8', function(err, contents) {
+    fs.readFile(__dirname + cherry.data.config.data_file, 'utf-8', function(err, contents) {
       if(err) {
         var message = "ingest-error";
         console.log("There was a problem ingesting you data.json file.");
@@ -180,7 +173,8 @@ cherry.ingest = function(req, res){
   }
 
   // render a confirmation
-  res.render('admin', { title: 'cherry cms', message: message, content: cherry.data.files });
+  // res.render('admin', { title: 'cherry cms', message: message, content: cherry.data });
+  res.redirect('/cherrycms');
 };
 
 
@@ -191,14 +185,14 @@ cherry.ingest = function(req, res){
  */
 cherry.pick = function() {
 
-	fs.readdir(cherry.data.config.src_dir, function(err, files) {
+	fs.readdir(__dirname + cherry.data.config.src_dir, function(err, files) {
 
 		files.filter( function(file) {
 			return file.substr(-5) == '.html';
 		})
 		.forEach( function(file) {
 
-			fs.readFile(cherry.data.config.src_dir + file, 'utf-8', function(err, contents) {
+			fs.readFile(__dirname + cherry.data.config.src_dir + file, 'utf-8', function(err, contents) {
 				if (err) throw err;
 
 				console.log("Cherry-picking content from",file);
@@ -225,14 +219,14 @@ cherry.pick = function() {
 cherry.generate = function(req, res){
 
 	// make the substitutions
-	fs.readdir(cherry.data.config.src_dir, function(err, files) {
+	fs.readdir(__dirname + cherry.data.config.src_dir, function(err, files) {
 
 		files.filter( function(file) {
 			return file.substr(-5) == '.html';
 		})
 		.forEach( function(file) {
 
-			fs.readFile(cherry.data.config.src_dir + file, 'utf-8', function(err, contents) {
+			fs.readFile(__dirname + cherry.data.config.src_dir + file, 'utf-8', function(err, contents) {
 				if (err) throw err;
 				var $ = cheerio.load(contents);
 
@@ -244,7 +238,6 @@ cherry.generate = function(req, res){
 
           console.log("templating... ", cherrytag.type );
 
-
           // markdown or text
           if(cherrytag.type == 'markdown') {
             data = marked(data);
@@ -255,7 +248,7 @@ cherry.generate = function(req, res){
 
 					$(this).attr('data-cherry', null);
 				});
-				fs.writeFile(cherry.data.config.site_dir + file, $.html(), function (err) {
+				fs.writeFile(__dirname + cherry.data.config.site_dir + file, $.html(), function (err) {
 					if (err) throw err;
 					console.log(file, "saved.");
 				});
@@ -264,7 +257,7 @@ cherry.generate = function(req, res){
 		});
 
 	});
-  res.render('page', { title: 'Cherry cms', message: "generated", file: req.params.file, content: cherry.data.files });
+  res.render('page', { title: 'Cherry cms', message: "generated", file: req.params.file, content: cherry.data });
 };
 
 
@@ -274,7 +267,7 @@ cherry.generate = function(req, res){
  */
 cherry.saveData = function() {
 
-	var file = __dirname + "/data.json";
+	var file = __dirname + cherry.data.config.data_file;
 	var data = JSON.stringify(cherry.data);
 	fs.writeFile(file, data, function (err) {
 		if (err) throw err;
@@ -295,17 +288,13 @@ app.get('/cherrycms/docs', cherry.docs);
 app.post('/cherrycms/ingest', cherry.ingest);
 
 
-/*
-	Let's get started
- */
-// cherry.pick();
-
 
 /*
 	Spin up the server
  */
 http.createServer(app).listen(app.get('port'), function(){
-	console.log('Express server listening on port ' + app.get('port'));
+  console.log('Starting the CherryCMS server');
+	console.log('Visit http://localhost:' + app.get('port') + '/cherrycms to manage your content.');
 });
 
 
