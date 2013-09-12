@@ -1,2 +1,3 @@
-cherrycms/node_modules
-cherrycms/data.json
+node_modules
+data.json
+.editorconfig
