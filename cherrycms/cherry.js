@@ -37,8 +37,6 @@ app.use('/', express.static(__dirname + cherry.data.config.site_dir));
 
 swig.init({ root: __dirname + '/views' });
 
-
-
 // development only
 if ('development' == app.get('env')) {
 	app.use(express.errorHandler());
@@ -147,9 +145,6 @@ cherry.pluck = function(file, id) {
 };
 
 
-
-
-
 /*
   Generate the CMS Admin by ingesting the HTML or JSOM file
 */
@@ -163,8 +158,6 @@ cherry.ingest = function(req, res){
   cherry.data.config.site_dir = req.body['output'];
 
   // TODO : create the output directory if it doesn't already exist.
-
-
 
   if (req.body['html']) {
     console.log("Generating CMS from site source....");
@@ -185,8 +178,6 @@ cherry.ingest = function(req, res){
   // res.render('admin', { title: 'cherry cms', message: message, content: cherry.data });
   res.redirect('/cherrycms');
 };
-
-
 
 
 /*
@@ -270,7 +261,6 @@ cherry.generate = function(req, res){
 };
 
 
-
 /*
 	Save the data as a JSON file
  */
@@ -297,7 +287,6 @@ app.get('/cherrycms/docs', cherry.docs);
 app.post('/cherrycms/ingest', cherry.ingest);
 
 
-
 /*
 	Spin up the server
  */
@@ -305,5 +294,3 @@ http.createServer(app).listen(app.get('port'), function(){
   console.log('Starting the CherryCMS server');
 	console.log('Visit http://localhost:' + app.get('port') + '/cherrycms to manage your content.');
 });
-
-
