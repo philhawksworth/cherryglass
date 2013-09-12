@@ -218,6 +218,14 @@ cherry.pick = function() {
  */
 cherry.generate = function(req, res){
 
+    var out_dir = __dirname + cherry.data.config.site_dir;
+
+    console.log("site dir?",  fs.existsSync(out_dir));
+
+    fs.mkdirSync(out_dir);
+
+    console.log("site dir?",  fs.existsSync(out_dir));
+
 	// make the substitutions
 	fs.readdir(__dirname + cherry.data.config.src_dir, function(err, files) {
 
