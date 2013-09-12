@@ -157,6 +157,15 @@ cherry.ingest = function(req, res){
 
   var message = "ingested";
 
+  // store the config options from the form
+  cherry.data.config.data_file = req.body['datafile'];
+  cherry.data.config.src_dir = req.body['source'];
+  cherry.data.config.site_dir = req.body['output'];
+
+  // TODO : create the output directory if it doesn't already exist.
+
+
+
   if (req.body['html']) {
     console.log("Generating CMS from site source....");
     cherry.pick();
