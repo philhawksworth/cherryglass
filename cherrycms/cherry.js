@@ -14,7 +14,7 @@ var cherry = {
   data : {
     // defualts.
     config : {
-      src_dir : "/../src/",
+      src_dir : "/example/",
       site_dir : "/../site/",
       data_file : "/data.json"
     },
