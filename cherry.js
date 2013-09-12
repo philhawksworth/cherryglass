@@ -6,7 +6,9 @@ var express = require('express'),
 		cons = require('consolidate'),
     swig = require('swig'),
     marked = require('marked'),
-		extend = require('extend');
+    rimraf = require('rimraf'),
+    extend = require('extend');
+
 
 var app = express();
 
@@ -218,13 +220,16 @@ cherry.pick = function() {
  */
 cherry.generate = function(req, res){
 
-    var out_dir = __dirname + cherry.data.config.site_dir;
-
-    console.log("site dir?",  fs.existsSync(out_dir));
-
+  // clean up or create the output directory
+  var out_dir = __dirname + cherry.data.config.site_dir;
+  if (fs.existsSync(out_dir)) {
+      rimraf(out_dir, function() {
+         fs.mkdirSync(out_dir);
+     });
+  } else {
     fs.mkdirSync(out_dir);
+  }
 
-    console.log("site dir?",  fs.existsSync(out_dir));
 
 	// make the substitutions
 	fs.readdir(__dirname + cherry.data.config.src_dir, function(err, files) {
@@ -243,8 +248,6 @@ cherry.generate = function(req, res){
 				$('[data-cherry]').each(function(i, elem) {
 					var cherrytag = JSON.parse($(this).attr('data-cherry'));
 					var data = cherry.pluck(file, cherrytag.id);
-
-          console.log("templating... ", cherrytag.type );
 
           // markdown or text
           if(cherrytag.type == 'markdown') {
