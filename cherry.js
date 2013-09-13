@@ -96,7 +96,6 @@ cherry.contentSubmission = function(req, res){
 
 	// inspect the content posted from the form
 	for(var node in req.body) {
-		console.log("nodes", node, req.body[node] );
 		var cherrytag = node.split(":");
     cherry.update(req.params.file, cherrytag[1], req.body[node]);
 	}
@@ -201,13 +200,16 @@ cherry.pick = function() {
 				var $ = cheerio.load(contents);
 				var title = $('title').text();
 
-				// parse a data cherry and lodge it in the model.
-				$('[data-cherry]').each(function(i, elem) {
-					var str = $(this).attr('data-cherry');
-					var cherrytag = JSON.parse(str);
-          var cherry_obj = extend(cherrytag, {"value": $(this).text()});
+        $('[data-cherry-id]').each(function(i, elem) {
+          var cherry_obj = {
+            id:     $(this).attr('data-cherry-id'),
+            type:   $(this).attr('data-cherry-type'),
+            label:  $(this).attr('data-cherry-label'),
+            help:   $(this).attr('data-cherry-help'),
+            value:  $(this).html()
+          };
           cherry.lodge(file, title, cherry_obj);
-				});
+        });
 
 			});
 		});
@@ -243,11 +245,14 @@ cherry.generate = function(req, res){
 				if (err) throw err;
 				var $ = cheerio.load(contents);
 
-				// parse a data cherry and replace its content with that found in the model.
-				// also remove the data-cherry attribute to eliminate any smells
-				$('[data-cherry]').each(function(i, elem) {
-					var cherrytag = JSON.parse($(this).attr('data-cherry'));
-					var data = cherry.pluck(file, cherrytag.id);
+        // parse a data cherry and replace its content with that found in the model.
+        // also remove the data-cherry attributes to eliminate any smells
+        $('[data-cherry-id]').each(function(i, elem) {
+          var cherrytag = {
+            id:     $(this).attr('data-cherry-id'),
+            type:   $(this).attr('data-cherry-type')
+          };
+          var data = cherry.pluck(file, cherrytag.id);
 
           // markdown or text
           if(cherrytag.type == 'markdown') {
@@ -257,11 +262,16 @@ cherry.generate = function(req, res){
             $(this).text(data);
           }
 
-					$(this).attr('data-cherry', null);
-				});
+          $(this).attr('data-cherry-id', null);
+          $(this).attr('data-cherry-type', null);
+          $(this).attr('data-cherry-help', null);
+          $(this).attr('data-cherry-label', null);
+        });
+
+        // write the file
 				fs.writeFile(__dirname + cherry.data.config.site_dir + file, $.html(), function (err) {
 					if (err) throw err;
-					console.log(file, "saved.");
+					console.log(__dirname + cherry.data.config.site_dir + file, "saved.");
 				});
 			});
 

@@ -6,34 +6,34 @@
 <body>
   <header>
     <!-- plain text target wth the cherry admin title: page-title. An optional 'label' field overrides the default 'id' label -->
-    <h2 data-cherry='{"id": "display-title", "type": "text", "label": "Page title"}'>header title</h2>
+    <h2 data-cherry-id='display-title' data-cherry-type='text' data-cherry-label='Page title'>header title</h2>
 
     <!-- Another text field, but with a helpful commetent to display in the CMS -->
-    <p data-cherry='{"id": "page-subtitle", "type": "text", "help": "Some descriptive help text. Perhaps sepcifying the kind of content or advised word count for this field."}'>sub title content</p>
+    <p data-cherry-id='page-subtitle' data-cherry-type='text' data-cherry-help='Some descriptive help text. Perhaps specifying the kind of content or advised word count for this field.'>sub title content</p>
   </header>
 
   <!--  markdown interpreted target wth the cherry admin title: intro -->
-  <p data-cherry='{"id": "intro", "type": "markdown"}' class="intro">
+  <p data-cherry-id='intro' data-cherry-type='markdown' class="intro">
     Placeholder copy
   </p>
 
   <p>
-    Other pages: <a href="page.html">Page</a>
+    Other pages: <a href="basic-page.html">Basic Page</a>
   </p>
 
   <!-- image target with the cherry admin title: hero -->
-  <img src="filler.png" data-cherry='{"type": "img", "id": "hero"}' />
+  <img src="filler.png" data-cherry-id='hero-img' data-cherry-type='img' />
 
-  <ul>
-    <!-- a collection of items, including nested content targets -->
-    <li data-cherry='{"type": "collection", "id": "popular-links"}'>
-      <a href="foo" data-cherry='{"type": "link", "id": "TBD"}'>bar</a>
+  <!-- a collection of items, including nested content targets
+  <ul data-cherry-id='popular-links' data-cherry-type='collection'>
+    <li>
+      <a href="foo" data-cherry-type='link' data-cherry-id="TBD">bar</a>
     </li>
   </ul>
-
+  -->
 
   <footer>
-    <p data-cherry='{"id": "footer-copy", "type": "text"}'>footer text</p>
+    <p data-cherry-id='footer' data-cherry-type='markdown' data-cherry-label='Footer content' data-cherry-help='Keep it short. Markdown is allowed'>footer text</p>
   </footer>
 
 </body>

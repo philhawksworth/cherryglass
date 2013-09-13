@@ -1,21 +1,21 @@
 <html>
 <head>
-    <title data-cherry='{"id": "display-title", "type": "text"}'>Basic page</title>
+     <title data-cherry-id='page-title' data-cherry-type='text'>Page title text</title>
 </head>
 <body>
 
     <header>
       <!-- plain text target wth the cherry admin title: page-title -->
-      <h2 data-cherry='{"id": "display-title", "type": "text"}'>header title</h2>
+
+      <h2 data-cherry-id='page-title' data-cherry-type='text' data-cherry-label='Page title' data-cherry-help='some usage guidance for the editor'>Page title text</h2>
     </header>
 
     <!--  markdown interpreted target wth the cherry admin title: intro -->
-    <p data-cherry='{"id": "intro", "type": "markdown"}' class="intro">
+    <p data-cherry-id='intro' data-cherry-type='markdown' class='intro'>
         Placeholder copy for the intro section
     </p>
 
     <!-- image target with the cherry admin title: hero -->
-    <img src="filler.png" data-cherry='{"type": "img", "id": "hero"}' />
     <p>
       The img type is not yet support. Soon!
     </p>
