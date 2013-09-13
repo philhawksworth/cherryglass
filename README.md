@@ -48,7 +48,7 @@ The format for the <code>data-cherry</code> attributes are:
 ### Cherry attributes
 
 <dl>
-  <dt>`data-cherry-id="any string"`</dt><dd>(required) A unique identifier on the page for this content. Displayed as a label for the field in the admin pages if no label is explicitly provided.</dd>
+  <dt><code>data-cherry-id="any string"<code></dt><dd>(required) A unique identifier on the page for this content. Displayed as a label for the field in the admin pages if no label is explicitly provided.</dd>
   <dt><code>data-cherry-type="[text | blob | markdown | img | collection]"</code></dt><dd>(required) Defining the type of content to deliver through the admin UI. Details below</dd>
   <dt><code>data-cherry-label="any string"</code></dt><dd>(optional) A label for displaying with the field in the admin pages.</dd>
   <dt><code>data-cherry-help="any string"</code></dt><dd>(optional) Descriptive content displayed in the admin pages to give guidance for the purpose or usage of this field.</dd>
