@@ -16,8 +16,8 @@ var cherry = {
   data : {
     // defualts.
     config : {
-      src_dir : "/example/",
-      site_dir : "/../site/",
+      src_dir : "/example",
+      site_dir : "/../site",
       data_file : "/data.json"
     },
     files : {}
@@ -58,6 +58,34 @@ marked.setOptions({
 
 
 /*
+  Recursively walk a directory structure
+ */
+var walk = function(dir, done) {
+  var results = [];
+  fs.readdir(dir, function(err, list) {
+    if (err) return done(err);
+    var pending = list.length;
+    if (!pending) return done(null, results);
+    list.forEach(function(file) {
+      file = dir + '/' + file;
+      fs.stat(file, function(err, stat) {
+        if (stat && stat.isDirectory()) {
+          walk(file, function(err, res) {
+            results = results.concat(res);
+            if (!--pending) done(null, results);
+          });
+        } else {
+          results.push(file);
+          if (!--pending) done(null, results);
+        }
+      });
+    });
+  });
+};
+
+
+
+/*
 	Render the resultant site.
  */
 cherry.site = function(req, res){
@@ -85,7 +113,10 @@ cherry.docs = function(req, res){
 	Render the admin form for a given page
  */
 cherry.showDataForm = function(req, res){
-	res.render('page', { title: 'Cherry CMS', message: req.params.file, file: req.params.file, content: cherry.data.files });
+
+  console.log("file: ", req.params[0]);
+
+	res.render('page', { title: 'Cherry CMS', message: req.params[0], file: req.params[0], content: cherry.data.files });
 };
 
 
@@ -94,15 +125,19 @@ cherry.showDataForm = function(req, res){
 */
 cherry.contentSubmission = function(req, res){
 
+  // TODO: refactor submission handling. No data type required fro form
+
+  var file = req.params[0];
+
 	// inspect the content posted from the form
 	for(var node in req.body) {
 		console.log("nodes", node, req.body[node] );
 		var cherrytag = node.split(":");
-    cherry.update(req.params.file, cherrytag[1], req.body[node]);
+    cherry.update(file, cherrytag[1], req.body[node]);
 	}
 
 	// render a confirmation
-	res.render('page', { title: 'cherry cms', message: "saved", file: req.params.file, content: cherry.data.files });
+	res.render('page', { title: 'cherry cms', message: "saved", file: file, content: cherry.data.files });
 };
 
 
@@ -187,31 +222,30 @@ cherry.ingest = function(req, res){
  */
 cherry.pick = function() {
 
-	fs.readdir(__dirname + cherry.data.config.src_dir, function(err, files) {
+  walk(__dirname + cherry.data.config.src_dir, function(err, results) {
+    if (err) throw err;
+      results.filter( function(file) {
+        return file.substr(-5) == '.html';
+      })
+      .forEach( function(file) {
+        console.log("...", file);
+        fs.readFile(file, 'utf-8', function(err, contents) {
+          if (err) throw err;
+          var $ = cheerio.load(contents);
+          var title = $('title').text();
 
-		files.filter( function(file) {
-			return file.substr(-5) == '.html';
-		})
-		.forEach( function(file) {
+          // parse a data cherry and lodge it in the model.
+          $('[data-cherry]').each(function(i, elem) {
+            var str = $(this).attr('data-cherry');
+            var cherrytag = JSON.parse(str);
+             var cherry_obj = extend(cherrytag, {"value": $(this).text()});
+             file = file.replace(__dirname + cherry.data.config.src_dir + "/", "");
+             cherry.lodge(file, title, cherry_obj);
+          });
+        });
+      });
+  });
 
-			fs.readFile(__dirname + cherry.data.config.src_dir + file, 'utf-8', function(err, contents) {
-				if (err) throw err;
-
-				console.log("Cherry-picking content from",file);
-				var $ = cheerio.load(contents);
-				var title = $('title').text();
-
-				// parse a data cherry and lodge it in the model.
-				$('[data-cherry]').each(function(i, elem) {
-					var str = $(this).attr('data-cherry');
-					var cherrytag = JSON.parse(str);
-          var cherry_obj = extend(cherrytag, {"value": $(this).text()});
-          cherry.lodge(file, title, cherry_obj);
-				});
-
-			});
-		});
-	});
 };
 
 
@@ -276,23 +310,20 @@ cherry.generate = function(req, res){
 	Save the data as a JSON file
  */
 cherry.saveData = function() {
-
 	var file = __dirname + cherry.data.config.data_file;
 	var data = JSON.stringify(cherry.data);
 	fs.writeFile(file, data, function (err) {
 		if (err) throw err;
-		console.log(file, "Data saved.");
 	});
-
 };
 
 
-//
-// Define routes
-//
+/*
+   Define routes
+*/
 app.get('/cherrycms', cherry.admin);
-app.get('/cherrycms/page/:file', cherry.showDataForm);
-app.post('/cherrycms/page/:file', cherry.contentSubmission);
+app.get('/cherrycms/page/*', cherry.showDataForm);
+app.post('/cherrycms/page/*', cherry.contentSubmission);
 app.get('/cherrycms/generate', cherry.generate);
 app.get('/cherrycms/docs', cherry.docs);
 app.post('/cherrycms/ingest', cherry.ingest);
