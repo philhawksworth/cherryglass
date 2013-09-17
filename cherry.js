@@ -114,9 +114,6 @@ cherry.docs = function(req, res){
 	Render the admin form for a given page
  */
 cherry.showDataForm = function(req, res){
-
-  console.log("file: ", req.params[0]);
-
 	res.render('page', { title: 'Cherry CMS', message: req.params[0], file: req.params[0], content: cherry.data.files });
 };
 
@@ -126,14 +123,20 @@ cherry.showDataForm = function(req, res){
 */
 cherry.contentSubmission = function(req, res){
 
-  // TODO: refactor submission handling. No data type required fro form
-
   var file = req.params[0];
 
 	// inspect the content posted from the form
 	for(var node in req.body) {
 		var cherrytag = node.split(":");
-    cherry.update(file, cherrytag[1], req.body[node]);
+    var href = null;
+    if(cherrytag[0] == "href") {
+      href = req.body[node];
+    }
+
+    console.log("element",  cherrytag[1], href);
+
+
+    cherry.update(file, cherrytag[1], req.body[node], href);
 	}
 
 	// render a confirmation
@@ -151,6 +154,7 @@ cherry.lodge = function(file, title, data) {
      "type": null,
      "id": null,
      "value": "",
+     "href" : null,
      "label": null,
      "help": null
   };
@@ -168,8 +172,15 @@ cherry.lodge = function(file, title, data) {
 /*
   update the stored value of a data cherry
  */
-cherry.update = function(file, id, value) {
+cherry.update = function(file, id, value, href) {
   cherry.data.files[file].cherries[id].value = value;
+
+console.log("args:", arguments);
+
+
+  if (href) {
+    cherry.data.files[file].cherries[id].href = href;
+  }
   cherry.saveData();
 };
 
@@ -178,7 +189,7 @@ cherry.update = function(file, id, value) {
 	pluck the data for a cherry from the data store
  */
 cherry.pluck = function(file, id) {
-	return cherry.data.files[file].cherries[id].value;
+	return cherry.data.files[file].cherries[id];
 };
 
 
@@ -243,6 +254,11 @@ cherry.pick = function() {
               value:  $(this).html()
             };
 
+            // also handle link types
+            if(cherry_obj.type == 'link'){
+              cherry_obj.href = $(this).attr('href');
+            }
+
             cherry.lodge(file.replace(__dirname + cherry.data.config.src_dir + "/", ""), title, cherry_obj);
           });
 
@@ -256,23 +272,7 @@ cherry.pick = function() {
   Clone a directory
  */
 cherry.clone = function(source, dest) {
-
-console.log("Clone: ", source, dest );
-
-<<<<<<< HEAD
-=======
-        $('[data-cherry-id]').each(function(i, elem) {
-          var cherry_obj = {
-            id:     $(this).attr('data-cherry-id'),
-            type:   $(this).attr('data-cherry-type'),
-            label:  $(this).attr('data-cherry-label'),
-            help:   $(this).attr('data-cherry-help'),
-            value:  $(this).html()
-          };
-          cherry.lodge(file, title, cherry_obj);
-        });
->>>>>>> bbfac702b39446c771e49f54ce6cc1804a80846d
-
+  console.log("Clone: ", source, dest );
   ncp(source, dest, function (err) {
     if (err) {
       return console.error(err);
@@ -312,14 +312,18 @@ cherry.inject = function() {
           };
           var data = cherry.pluck(file, cherrytag.id);
 
-          // markdown or text
+          // markdown or text or link
           if(cherrytag.type == 'markdown') {
-            data = marked(data);
+            data = marked(data.value);
             $(this).html(data);
+          } else if (cherrytag.type == 'link') {
+            $(this).text(data.value);
+            $(this).attr('href', data.href );
           } else {
-            $(this).text(data);
+            $(this).text(data.value);
           }
 
+          // clean up so that we leave no smellsin the markup
           $(this).attr('data-cherry-id', null);
           $(this).attr('data-cherry-type', null);
           $(this).attr('data-cherry-help', null);
@@ -327,7 +331,6 @@ cherry.inject = function() {
         });
 
         // write the file
-<<<<<<< HEAD
         fs.writeFile(out_dir + "/" + file, $.html(), function (err) {
           if (err) throw err;
           console.log(out_dir + file, "saved.");
@@ -346,7 +349,6 @@ cherry.inject = function() {
 	Generate the site from the source and the managed values.
  */
 cherry.generate = function(req, res){
-
 
   var out_dir = __dirname + cherry.data.config.site_dir;
   var source_dir = __dirname + cherry.data.config.src_dir;
@@ -372,20 +374,7 @@ cherry.generate = function(req, res){
       }
       cherry.inject();
     });
-
-
   }
-
-
-
-=======
-				fs.writeFile(__dirname + cherry.data.config.site_dir + file, $.html(), function (err) {
-					if (err) throw err;
-					console.log(__dirname + cherry.data.config.site_dir + file, "saved.");
-				});
-			});
->>>>>>> bbfac702b39446c771e49f54ce6cc1804a80846d
-
 
   res.render('page', { title: 'Cherry cms', message: "generated", file: req.params.file, content: cherry.data });
 };
