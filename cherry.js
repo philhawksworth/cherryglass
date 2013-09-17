@@ -2,7 +2,8 @@ var express = require('express'),
 		http = require('http'),
 		path = require('path'),
 		cheerio = require('cheerio'),
-		fs = require('fs'),
+    fs = require('fs'),
+		ncp = require('ncp'),
 		cons = require('consolidate'),
     swig = require('swig'),
     marked = require('marked'),
@@ -249,59 +250,77 @@ cherry.pick = function() {
 };
 
 
+cherry.clone = function(source, dest) {
+  ncp(source, dest, function (err) {
+    if (err) {
+      return console.error(err);
+    }
+  });
+};
+
+
 /*
 	Generate the site from the source and the managed values.
  */
 cherry.generate = function(req, res){
 
-  // clean up or create the output directory
+
   var out_dir = __dirname + cherry.data.config.site_dir;
+  var source_dir = __dirname + cherry.data.config.src_dir;
+
+  // clean up or create the output directory and
+  // replicate the source directory as the output
   if (fs.existsSync(out_dir)) {
+    console.log("CLeaning output directory.");
       rimraf(out_dir, function() {
-         fs.mkdirSync(out_dir);
+        console.log("output cleaned");
+        cherry.clone(source_dir, out_dir);
      });
   } else {
-    fs.mkdirSync(out_dir);
+    cherry.clone(source_dir, out_dir);
   }
 
 
+
+
+
 	// make the substitutions
-	fs.readdir(__dirname + cherry.data.config.src_dir, function(err, files) {
+	// fs.readdir(__dirname + cherry.data.config.src_dir, function(err, files) {
 
-		files.filter( function(file) {
-			return file.substr(-5) == '.html';
-		})
-		.forEach( function(file) {
+	// 	files.filter( function(file) {
+	// 		return file.substr(-5) == '.html';
+	// 	})
+	// 	.forEach( function(file) {
 
-			fs.readFile(__dirname + cherry.data.config.src_dir + file, 'utf-8', function(err, contents) {
-				if (err) throw err;
-				var $ = cheerio.load(contents);
+	// 		fs.readFile(__dirname + cherry.data.config.src_dir + "/" + file, 'utf-8', function(err, contents) {
+	// 			if (err) throw err;
+	// 			var $ = cheerio.load(contents);
 
-				// parse a data cherry and replace its content with that found in the model.
-				// also remove the data-cherry attribute to eliminate any smells
-				$('[data-cherry]').each(function(i, elem) {
-					var cherrytag = JSON.parse($(this).attr('data-cherry'));
-					var data = cherry.pluck(file, cherrytag.id);
+	// 			// parse a data cherry and replace its content with that found in the model.
+	// 			// also remove the data-cherry attribute to eliminate any smells
+	// 			$('[data-cherry]').each(function(i, elem) {
+	// 				var cherrytag = JSON.parse($(this).attr('data-cherry'));
+	// 				var data = cherry.pluck(file, cherrytag.id);
 
-          // markdown or text
-          if(cherrytag.type == 'markdown') {
-            data = marked(data);
-            $(this).html(data);
-          } else {
-            $(this).text(data);
-          }
+ //          // markdown or text
+ //          if(cherrytag.type == 'markdown') {
+ //            data = marked(data);
+ //            $(this).html(data);
+ //          } else {
+ //            $(this).text(data);
+ //          }
 
-					$(this).attr('data-cherry', null);
-				});
-				fs.writeFile(__dirname + cherry.data.config.site_dir + file, $.html(), function (err) {
-					if (err) throw err;
-					console.log(file, "saved.");
-				});
-			});
+	// 				$(this).attr('data-cherry', null);
+	// 			});
+	// 			fs.writeFile(__dirname + cherry.data.config.site_dir +"/" + file, $.html(), function (err) {
+	// 				if (err) throw err;
+	// 				console.log(file, "saved.");
+	// 			});
+	// 		});
 
-		});
+	// 	});
 
-	});
+	// });
   res.render('page', { title: 'Cherry cms', message: "generated", file: req.params.file, content: cherry.data });
 };
 

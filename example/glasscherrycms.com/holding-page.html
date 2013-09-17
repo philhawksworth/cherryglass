@@ -3,7 +3,7 @@
   <head>
     <title>GlassCherry CMS</title>
     <meta charset="UTF-8">
-    <link href='http://fonts.googleapis.com/css?family=Rancho' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400' rel='stylesheet' type='text/css'>
     <style>
 
 
@@ -15,8 +15,8 @@
       body {
         text-align: center;
         color: #666;
-        font-family: "open-sans", sans-serif;
-        font-size: 16px;
+       font-family: 'Lato', sans-serif;
+        font-size: 18px;
         line-height: 1.6em;
         color:#77776b;
         -webkit-font-smoothing:antialiased;
@@ -27,8 +27,14 @@
 
       }
 
+      .menu {
+        background-color: #fff;
+        height:60px;
+      }
+
       .hero {
-        background: #230b26 url(stripe-tile-wide.png) repeat;
+        background: #230b26 url(tree-3.jpg) no-repeat 0 0;
+        background-size: 100%;
         color: #fff;
         padding-top: 200px;
         padding-bottom: 50px;
@@ -39,7 +45,6 @@
           margin: 0 auto;
           font-size: 5em;
           line-height: 1;
-          font-family: 'Rancho', cursive;
           letter-spacing: 0.06em;
           text-shadow: 2px 2px 0 #230b26, 4px 6px 0 #5f1f68;
         }
@@ -92,8 +97,8 @@
       }
 
       .dev-step-1 {
-        border-top: solid 1px rgba(200, 200, 200, 0.2);
-        background-color: #230b26;
+        /*border-top: solid 1px rgba(200, 200, 200, 0.2);*/
+        background-color: #fff;
       }
 
       .odd {
@@ -115,17 +120,34 @@
       }
 
 
+      a.register {
+        margin: -20px auto 20px;
+        height: 80px;
+        width: 100px;
+        text-align: center;
+        background-color: #3c5c7d;
+        color: #fff;
+        border: solid 6px #fff;
+        border-radius: 8px;
+        line-height: 3;
+      }
+
+
     </style>
   </head>
   <body>
 
+    <div class="menu">
+
+    </div>
     <div class="hero">
       <img src="" />
-      <h1 data-cherry='{"type": "text", "id": "page-title", "label": "Main page title"}'>GlassCherry CMS</h1>
-      <p data-cherry='{"type": "text", "id": "strap-line", "label": "Cheeky strap line"}'>
+      <h1 data-cherry-id="page-title" data-cherry-type="text">GlassCherry CMS</h1>
+      <p data-cherry-id="strap-line" data-cherry-type="text">
         An unopinionated content management system which helps the author without hurting the developer
       </p>
     </div>
+    <a class="register" href="/register">Register</a>
 
     <div class="stripe dev-step-1">
 
