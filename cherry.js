@@ -235,27 +235,97 @@ cherry.pick = function() {
           var $ = cheerio.load(contents);
           var title = $('title').text();
 
-          // parse a data cherry and lodge it in the model.
-          $('[data-cherry]').each(function(i, elem) {
-            var str = $(this).attr('data-cherry');
-            var cherrytag = JSON.parse(str);
-             var cherry_obj = extend(cherrytag, {"value": $(this).text()});
-             file = file.replace(__dirname + cherry.data.config.src_dir + "/", "");
-             cherry.lodge(file, title, cherry_obj);
+          $('[data-cherry-id]').each(function(i, elem) {
+            var cherry_obj = {
+              id:     $(this).attr('data-cherry-id'),
+              type:   $(this).attr('data-cherry-type'),
+              label:  $(this).attr('data-cherry-label'),
+              help:   $(this).attr('data-cherry-help'),
+              value:  $(this).html()
+            };
+
+            cherry.lodge(file.replace(__dirname + cherry.data.config.src_dir + "/", ""), title, cherry_obj);
           });
+
         });
       });
   });
 
 };
 
-
+/*
+  Clone a directory
+ */
 cherry.clone = function(source, dest) {
+
+console.log("Clone: ", source, dest );
+
+
   ncp(source, dest, function (err) {
     if (err) {
       return console.error(err);
     }
   });
+};
+
+
+cherry.inject = function() {
+
+
+  var out_dir = __dirname + cherry.data.config.site_dir;
+  var source_dir = __dirname + cherry.data.config.src_dir;
+
+  // make the substitutions
+  fs.readdir(out_dir, function(err, files) {
+
+    if (err) {
+      return console.error(err);
+    }
+
+    files.filter( function(file) {
+      return file.substr(-5) == '.html';
+    })
+    .forEach( function(file) {
+
+      fs.readFile(out_dir + "/" + file, 'utf-8', function(err, contents) {
+        if (err) throw err;
+        var $ = cheerio.load(contents);
+
+        // parse a data cherry and replace its content with that found in the model.
+        // also remove the data-cherry attributes to eliminate any smells
+        $('[data-cherry-id]').each(function(i, elem) {
+          var cherrytag = {
+            id:     $(this).attr('data-cherry-id'),
+            type:   $(this).attr('data-cherry-type')
+          };
+          var data = cherry.pluck(file, cherrytag.id);
+
+          // markdown or text
+          if(cherrytag.type == 'markdown') {
+            data = marked(data);
+            $(this).html(data);
+          } else {
+            $(this).text(data);
+          }
+
+          $(this).attr('data-cherry-id', null);
+          $(this).attr('data-cherry-type', null);
+          $(this).attr('data-cherry-help', null);
+          $(this).attr('data-cherry-label', null);
+        });
+
+        // write the file
+        fs.writeFile(out_dir + "/" + file, $.html(), function (err) {
+          if (err) throw err;
+          console.log(out_dir + file, "saved.");
+        });
+      });
+
+    });
+
+  });
+
+
 };
 
 
@@ -274,53 +344,29 @@ cherry.generate = function(req, res){
     console.log("CLeaning output directory.");
       rimraf(out_dir, function() {
         console.log("output cleaned");
-        cherry.clone(source_dir, out_dir);
+        ncp(source_dir, out_dir, function (err) {
+          if (err) {
+            return console.error(err);
+          }
+          cherry.inject();
+        });
+
      });
   } else {
-    cherry.clone(source_dir, out_dir);
+    ncp(source_dir, out_dir, function (err) {
+      if (err) {
+        return console.error(err);
+      }
+      cherry.inject();
+    });
+
+
   }
 
 
 
 
 
-	// make the substitutions
-	// fs.readdir(__dirname + cherry.data.config.src_dir, function(err, files) {
-
-	// 	files.filter( function(file) {
-	// 		return file.substr(-5) == '.html';
-	// 	})
-	// 	.forEach( function(file) {
-
-	// 		fs.readFile(__dirname + cherry.data.config.src_dir + "/" + file, 'utf-8', function(err, contents) {
-	// 			if (err) throw err;
-	// 			var $ = cheerio.load(contents);
-
-	// 			// parse a data cherry and replace its content with that found in the model.
-	// 			// also remove the data-cherry attribute to eliminate any smells
-	// 			$('[data-cherry]').each(function(i, elem) {
-	// 				var cherrytag = JSON.parse($(this).attr('data-cherry'));
-	// 				var data = cherry.pluck(file, cherrytag.id);
-
- //          // markdown or text
- //          if(cherrytag.type == 'markdown') {
- //            data = marked(data);
- //            $(this).html(data);
- //          } else {
- //            $(this).text(data);
- //          }
-
-	// 				$(this).attr('data-cherry', null);
-	// 			});
-	// 			fs.writeFile(__dirname + cherry.data.config.site_dir +"/" + file, $.html(), function (err) {
-	// 				if (err) throw err;
-	// 				console.log(file, "saved.");
-	// 			});
-	// 		});
-
-	// 	});
-
-	// });
   res.render('page', { title: 'Cherry cms', message: "generated", file: req.params.file, content: cherry.data });
 };
 
