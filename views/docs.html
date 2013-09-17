@@ -28,30 +28,27 @@
       Marking an element as a cherry is done by adding the data attribute of <code>data-cherry</code> to it. This validates with the HTML5 spec and does not impact the rendering of your pages when viewed as normal before conten management.
     </p>
     <p>
-      The format for the <code>data-cherry</code> attributes is:
+      The format for the <code>data-cherry</code> attributes are:
     </p>
-    <pre>data-cherry='{"name": "value", "name": "value", ...}'</pre>
-    <p>
-      For example:
-    </p>
-    <pre>&lt;h1 data-cherry='{"id": "page-title", "type": "text"}'&gt;Placeholder text&lt;/h1&gt;</pre>
+    <pre>&lt;h1 data-cherry-id="page-title" data-cherry-type="text"&gt;Placeholder text&lt;/h1&gt;</pre>
     <p>
       <code>id</code> and <code>type</code> are the only mandatory attributes in cherries.
     </p>
 
     <h3>Cherry attributes</h3>
     <dl>
-      <dt><code>"id": "any string"</code></dt><dd>A unique identifier on the page for this content. Displayed as a label for the field in the admin pages if no label is explicitly provided.</dd>
-      <dt><code>"label": "any string"</code></dt><dd>A label for displaying with the field in the admin pages.</dd>
-      <dt><code>"help": "any string"</code></dt><dd>Descriptive content displayed in the admin pages to give guidance for the purpose or usage of this field.</dd>
+      <dt><code>data-cherry-id="any string"</code></dt><dd>(required) A unique identifier on the page for this content. Displayed as a label for the field in the admin pages if no label is explicitly provided.</dd>
+      <dt><code>data-cherry-type="[text | blob | markdown | img | collection]"</code></dt><dd>(required) Defining the type of content to deliver through the admin UI. Details below</dd>
+      <dt><code>data-cherry-label="any string"</code></dt><dd>(optional) A label for displaying with the field in the admin pages.</dd>
+      <dt><code>data-cherry-help="any string"</code></dt><dd>(optional) Descriptive content displayed in the admin pages to give guidance for the purpose or usage of this field.</dd>
     </dl>
     <h3>Cherry types</h3>
     <dl>
-      <dt><code>"type": "text"</code></dt><dd>Provides a simple text element for management. Good for short string substitutions.</dd>
-      <dt><code>"type": "blob"</code></dt><dd>Provides a larger text element for management. Shows as a textarea in the admin pages. Good for longer sections of text but supports no formatting other than paragraphs.</dd>
-      <dt><code>"type": "markdown"</code></dt><dd>Provides a larger text element for management. Shows as a textarea in the admin pages and supports markdown for simple formatting.</dd>
-      <dt><code>"type": "img"</code></dt><dd>Provides management of the source of an image asset. THe admin pages will show an image upload form.</dd>
-      <dt><code>"type": "collection"</code></dt><dd>Provides a nested, repeatable set of elements. The admin pages give the option to add new elements within that collection</dd>
+      <dt><code>data-cherry-type="text"</code></dt><dd>Provides a simple text element for management. Good for short string substitutions.</dd>
+      <dt><code>data-cherry-type="blob"</code></dt><dd>Provides a larger text element for management. Shows as a textarea in the admin pages. Good for longer sections of text but supports no formatting other than paragraphs.</dd>
+      <dt><code>data-cherry-type="markdown"</code></dt><dd>Provides a larger text element for management. Shows as a textarea in the admin pages and supports markdown for simple formatting.</dd>
+      <dt><code>data-cherry-type="img"</code></dt><dd>Provides management of the source of an image asset. The admin pages will show an image upload form.</dd>
+      <dt><code>data-cherry-type="collection"</code></dt><dd>Provides a nested, repeatable set of elements. The admin pages give the option to add new elements within that collection</dd>
 
     </dl>
 

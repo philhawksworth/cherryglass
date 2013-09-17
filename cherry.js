@@ -132,7 +132,6 @@ cherry.contentSubmission = function(req, res){
 
 	// inspect the content posted from the form
 	for(var node in req.body) {
-		console.log("nodes", node, req.body[node] );
 		var cherrytag = node.split(":");
     cherry.update(file, cherrytag[1], req.body[node]);
 	}
@@ -260,6 +259,19 @@ cherry.clone = function(source, dest) {
 
 console.log("Clone: ", source, dest );
 
+<<<<<<< HEAD
+=======
+        $('[data-cherry-id]').each(function(i, elem) {
+          var cherry_obj = {
+            id:     $(this).attr('data-cherry-id'),
+            type:   $(this).attr('data-cherry-type'),
+            label:  $(this).attr('data-cherry-label'),
+            help:   $(this).attr('data-cherry-help'),
+            value:  $(this).html()
+          };
+          cherry.lodge(file, title, cherry_obj);
+        });
+>>>>>>> bbfac702b39446c771e49f54ce6cc1804a80846d
 
   ncp(source, dest, function (err) {
     if (err) {
@@ -315,6 +327,7 @@ cherry.inject = function() {
         });
 
         // write the file
+<<<<<<< HEAD
         fs.writeFile(out_dir + "/" + file, $.html(), function (err) {
           if (err) throw err;
           console.log(out_dir + file, "saved.");
@@ -365,6 +378,13 @@ cherry.generate = function(req, res){
 
 
 
+=======
+				fs.writeFile(__dirname + cherry.data.config.site_dir + file, $.html(), function (err) {
+					if (err) throw err;
+					console.log(__dirname + cherry.data.config.site_dir + file, "saved.");
+				});
+			});
+>>>>>>> bbfac702b39446c771e49f54ce6cc1804a80846d
 
 
   res.render('page', { title: 'Cherry cms', message: "generated", file: req.params.file, content: cherry.data });
