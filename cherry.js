@@ -251,7 +251,7 @@ cherry.pick = function() {
               type:   $(this).attr('data-cherry-type'),
               label:  $(this).attr('data-cherry-label'),
               help:   $(this).attr('data-cherry-help'),
-              value:  $(this).html()
+              value:  $(this).html().trim()
             };
 
             // also handle link types
