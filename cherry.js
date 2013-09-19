@@ -153,17 +153,13 @@ cherry.lodge = function(file, title, data) {
   var obj = {
      "type": null,
      "id": null,
-     "value": "",
-     "href" : null,
-     "label": null,
-     "help": null
+     "value": ""
   };
   obj = extend(obj, data);
 
 	if(!cherry.data.files[file]) {
 		cherry.data.files[file] = {"pagetitle": title, "cherries": {}};
 	}
-
   cherry.data.files[file].cherries[obj.id] = obj;
   cherry.saveData();
 };
@@ -174,10 +170,6 @@ cherry.lodge = function(file, title, data) {
  */
 cherry.update = function(file, id, value, href) {
   cherry.data.files[file].cherries[id].value = value;
-
-console.log("args:", arguments);
-
-
   if (href) {
     cherry.data.files[file].cherries[id].href = href;
   }
@@ -259,6 +251,12 @@ cherry.pick = function() {
               cherry_obj.href = $(this).attr('href');
             }
 
+            // handle collections
+            if(cherry_obj.type == 'collection'){
+              console.log("collection:", cherry_obj.value );
+              cherry_obj.template = cherry_obj.value;
+            }
+
             cherry.lodge(file.replace(__dirname + cherry.data.config.src_dir + "/", ""), title, cherry_obj);
           });
 
@@ -281,13 +279,13 @@ cherry.clone = function(source, dest) {
 };
 
 
+/*
+  Make the content subsitution into the file.
+ */
 cherry.inject = function() {
 
+  var out_dir = __dirname + cherry.data.config.site_dir + "/";
 
-  var out_dir = __dirname + cherry.data.config.site_dir;
-  var source_dir = __dirname + cherry.data.config.src_dir;
-
-  // make the substitutions
   fs.readdir(out_dir, function(err, files) {
 
     if (err) {
@@ -299,7 +297,7 @@ cherry.inject = function() {
     })
     .forEach( function(file) {
 
-      fs.readFile(out_dir + "/" + file, 'utf-8', function(err, contents) {
+      fs.readFile(out_dir + file, 'utf-8', function(err, contents) {
         if (err) throw err;
         var $ = cheerio.load(contents);
 
@@ -331,7 +329,7 @@ cherry.inject = function() {
         });
 
         // write the file
-        fs.writeFile(out_dir + "/" + file, $.html(), function (err) {
+        fs.writeFile(out_dir + file, $.html(), function (err) {
           if (err) throw err;
           console.log(out_dir + file, "saved.");
         });

@@ -1,0 +1,15 @@
+{% macro form(id, type, value, label, help) %}
+
+    ID: {{ id }}
+
+{#     {% if label %}
+    <label for="{{id}}">{{label}}</label>
+    {% else %}
+    <label for="{{id}}">{{id}}</label>
+    {% endif %}
+    <input type="text" id="{{id}}" name="{{type}}:{{id}}" value="{{value}}" class="input-xxlarge" />
+    {% if help %}
+    <span class="help-block">{{help}}</span>
+    {% endif %} #}
+
+{% endmacro %}
