@@ -216,7 +216,7 @@ cherry.ingest = function(req, res){
 
   // render a confirmation
   // res.render('admin', { title: 'cherry cms', message: message, content: cherry.data });
-  res.redirect('/cherrycms');
+  res.redirect('/cms');
 };
 
 
@@ -393,12 +393,12 @@ cherry.saveData = function() {
 /*
    Define routes
 */
-app.get('/cherrycms', cherry.admin);
-app.get('/cherrycms/page/*', cherry.showDataForm);
-app.post('/cherrycms/page/*', cherry.contentSubmission);
-app.get('/cherrycms/generate', cherry.generate);
-app.get('/cherrycms/docs', cherry.docs);
-app.post('/cherrycms/ingest', cherry.ingest);
+app.get('/cms', cherry.admin);
+app.get('/cms/page/*', cherry.showDataForm);
+app.post('/cms/page/*', cherry.contentSubmission);
+app.get('/cms/generate', cherry.generate);
+app.get('/cms/docs', cherry.docs);
+app.post('/cms/ingest', cherry.ingest);
 
 
 /*
@@ -406,5 +406,5 @@ app.post('/cherrycms/ingest', cherry.ingest);
  */
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Starting the CherryCMS server');
-	console.log('Visit http://localhost:' + app.get('port') + '/cherrycms to manage your content.');
+	console.log('Visit http://localhost:' + app.get('port') + '/cms to manage your content.');
 });

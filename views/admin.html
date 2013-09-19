@@ -4,22 +4,22 @@
 
 {% block pagelist %}
       {% for item in content.files %}
-      <li><a href="/cherrycms/page/{{ loop.key }}">{{ item.pagetitle }}</a></li>
+      <li><a href="/cms/page/{{ loop.key }}">{{ item.pagetitle }}</a></li>
       {% endfor %}
 {% endblock pagelist %}
 
 {% block content %}
 
-    <h2>Welcome to your GlassCherry CMS</h2>
+    <h2>Welcome to your CherryGlass CMS</h2>
 
     <h3>Let's get started</h3>
     <p>
-        GlassCherry generates a static site from your existing site source code and lets you add elements of managed content.
+        CherryGlass generates a static site from your existing site source code and lets you add elements of managed content.
     </p>
 
     <hr>
 
-    <form action="/cherrycms/ingest" method="post" class="form-inline">
+    <form action="/cms/ingest" method="post" class="form-inline">
       <fieldset>
         <h4>Where should the output go?</h4>
         <label for="output">output directory</label>

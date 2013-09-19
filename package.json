@@ -1,6 +1,6 @@
 {
-  "name": "cherryCMS",
-  "version": "0.0.0",
+  "name": "GlassCherry CMS",
+  "version": "0.0.2",
   "description": "A very lightweight CMS indeed",
   "main": "cherry.js",
   "dependencies": {

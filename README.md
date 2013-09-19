@@ -1,4 +1,4 @@
-GlassCherry CMS
+CherryGlass CMS
 ===============
 
 A very light CMS for adding manageable content to your static sites.
@@ -13,28 +13,27 @@ A very light CMS for adding manageable content to your static sites.
 ## Installation
 
 - Clone this repo into your site's project directory
-- `cd cherrycms`
+- `cd cherryglass`
 - install the dependancies with `npm install`
 
 
 
 ## Usage
 
-- in the project route, run `node cherrycms` to start the admin site
-- open your browser at `localhost:3000/cherrycms` to access the admin site
-- GlassCherry will inspect your static html files and create a CMS admin site tailored to the "data cherries" that it finds in your markup. Details of the supported data-types and syntax are listed below and from within the admin site at `/cherrycsc/docs`
+- in the project route, run `node cherryglass` to start the admin site
+- open your browser at `localhost:3000/cms` to access the admin site
+- CherryGlass will inspect your static html files and create a CMS admin site tailored to the "data cherries" that it finds in your markup. Details of the supported data-types and syntax are listed below and from within the admin site at `/cherrycsc/docs`
 
 
 
 ## Development
 
-- A backlog of thoughts and features is on [trello](https://trello.com/b/N7FFSlle/cherry-cms)
-- [Release notes](https://github.com/philhawksworth/cherrycms/wiki/Release-notes) availble on the wiki.
+- [Release notes](https://github.com/philhawksworth/cherryglass/wiki/Release-notes) availble on the wiki.
 
 
 ## Syntax
 
-CherryCMS generates an admin site for you to manage the content in specific areas of your site. You can define content-manageable areas in your site by decorating your chose HTML elements with `data-cherry` attributes.
+CherryGlass CMS generates an admin site for you to manage the content in specific areas of your site. You can define content-manageable areas in your site by decorating your chose HTML elements with `data-cherry` attributes.
 
 Different types of content types are available to specify in this way. For example:
 

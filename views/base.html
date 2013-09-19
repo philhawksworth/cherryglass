@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>GlassCherry CMS</title>
+    <title>CherryGlass CMS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css">
@@ -32,10 +32,10 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid">
-          <a class="brand" href="/cherrycms">GlassCherry CMS</a>
+          <a class="brand" href="/cms">CherryGlass CMS</a>
             <ul class="nav">
-              <li><a href="/cherrycms/docs">Docs</a></li>
-              <li><a href="http://glasscherrycms.com">CMS Hosting</a></li>
+              <li><a href="/cms/docs">Docs</a></li>
+              <li><a href="http://cherryglasscms.com">CMS Hosting</a></li>
             </ul>
         </div>
       </div>
@@ -47,9 +47,9 @@
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
               <li class="nav-header">Tools</li>
-              <li><a href="/cherrycms">Admin home</a></li>
-              <li><a href="/cherrycms/docs#syntax">Syntax cheatsheet</a></li>
-              <li><a href="/cherrycms/generate">Generate the site</a></li>
+              <li><a href="/cms">Admin home</a></li>
+              <li><a href="/cms/docs#syntax">Syntax cheatsheet</a></li>
+              <li><a href="/cms/generate">Generate the site</a></li>
 
               <li class="nav-header">Site pages</li>
               {% block pagelist %}
@@ -77,10 +77,9 @@
           {% endif %}
 
 
-            {% block message %}{% endblock message %}
+          {% block message %}{% endblock message %}
 
-            {% block content %}
-            {% endblock content %}
+          {% block content %}{% endblock content %}
         </div><!--/span-->
 
 
@@ -89,7 +88,7 @@
       <hr>
 
       <footer>
-        <p>GlassCherry CMS - version 0.0.2</p>
+        <p>CherryGlass CMS - version 0.0.2</p>
       </footer>
 
     </div><!--/.fluid-container-->

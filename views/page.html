@@ -5,16 +5,16 @@
    {% block pagelist %}
       {% for item in content %}
          {% if file == loop.key %}
-            <li class="active"><a href="/cherrycms/page/{{ loop.key }}">{{ item.pagetitle }}</a></li>
+            <li class="active"><a href="/cms/page/{{ loop.key }}">{{ item.pagetitle }}</a></li>
          {% else %}
-            <li><a href="/cherrycms/page/{{ loop.key }}">{{ item.pagetitle }}</a></li>
+            <li><a href="/cms/page/{{ loop.key }}">{{ item.pagetitle }}</a></li>
          {% endif %}
       {% endfor %}
    {% endblock pagelist %}
 
    {% block content %}
 
-   <form action="/cherrycms/page/{{ file }}" method="post">
+   <form action="/cms/page/{{ file }}" method="post">
 
       <legend>Content for management in <em>{{ file }}</em></legend>
       {% for item in content[file].cherries %}
@@ -73,7 +73,7 @@
 
       <p>
          <div class="btn-group">
-            <a class="btn" href="/cherrycms">Cancel</a>
+            <a class="btn" href="/cms">Cancel</a>
             <button type="submit" class="btn btn-primary">Save data</button>
          </div>
       </p>
