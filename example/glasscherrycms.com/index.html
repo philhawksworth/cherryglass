@@ -1,0 +1,193 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Minimal by Steve Smith</title>
+
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <!-- <img src="tree-3.jpg" class="logo" /> -->
+        <h1>CherryGlass CMS</h1><p>Easy content management for static sites</p>
+        <ul>
+          <li><a href="http://github.com/orderedlist/minimal">Fork On <strong>GitHub</strong></a></li>
+          <li><a href="https://github.com/orderedlist/minimal/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a class="signup" href="https://github.com/orderedlist/minimal/tarball/master">Sign up for<strong>Hosting</strong></a></li>
+        </ul>
+
+
+      <div><a href="#what">What is it?</a><br>
+        <a href="#how">How does it work?</a><br>
+        <a href="#workflow">A common workflow</a><br>
+        <a href="#hosting">Hosting</a><br>
+        <a href="#docs">Documentation</a>
+      </div>
+
+      </header>
+      <section>
+        <h2 id="what">What is it?</h2>
+        <p>
+          CherryGlass provides a simple content managment tool for your static sites. It is designed to be simple for content editors, while being kind to developers.
+        </p>
+        <p>
+          <em>This site is managed with CherryGlass, and you can see that it leaves no traces behind in the <a href="">HTML page source</a></em>
+        </p>
+        <p>
+          CherryGlass separates the content management from the hosting of your site, so you can host on cost-effective and high performance static hosting providers like <a href="http://github.com/ghpages">GitHub Pages</a>, <a href="">Amazon S3</a> or even <a href="">Dropbox</a>
+        </p>
+
+        <hr>
+
+        <h2 id="how">How does it work?</h2>
+        <!-- <h3>CherryGlass enhances your static site to make your content manageable</h3> -->
+
+        <p>
+          By looking for HTML5 data attribute in your markup, CherryGlass generates a content admin site for you which includes just the controls that you need.
+        </p>
+        <p>
+          An editable element would look like this:
+        </p>
+
+        <div class="highlight">
+        <pre><span class="nb">&lt;p</span> <span class="no">data-cherry-id=<span class="s1">"intro"</span></span> <span class="no">data-cherry-type=<span class="s1">"text"</span></span><span class="nb">&gt;</span>
+<span class="n"> Woohoo! This will get an admin UI</span>
+<span class="nb">&lt;/p&gt;</span></pre>
+
+        <p>Since we only need to add valid HTML attributes to your site's source, you'll still be able to view it and validate it in the same way as you did before. Nothing to mangle your rendering, even at this stage.</p>
+
+        <hr>
+
+        <h2 id="workflow">A common workflow</h2>
+        <p>
+          Let's looks at a common process of using CherryGlass to add a CMS to a static site.
+        </p>
+
+        <h3>1. Write your HTML</h3>
+        <p>
+          You'll do this better than a CMS engine. We'll let you engineer your front-end code the way you like it. Whatever your usual process is, do that.
+        </p>
+
+        <h3>2. Create content 'cherries'</h3>
+        <p>
+          Some of your site will need to allow elements to be managed by an editor. Add HTML5 data attributes to the elements you need to enable as manageable content.
+        </p>
+
+        <h3>3. Generate a CMS admin site</h3>
+        <p>
+          This where CherryGlass kicks in. Feed it your HTML and it will poop out a CMS admin site for you. The site runs on NodeJS and you can run it locally or on a development server.
+        </p>
+
+        <h3>4. Edit the content</h3>
+        <p>
+          Use the simple form-based admin site to edit the elements you specified.
+        </p>
+
+        <h3>5. Build and Deploy</h3>
+        <p>
+          At the push of a button, CherryGlass will combine yout HTML with the values entered in the admin site. It will clean up all of the data attributes it used and output your HTML. Fresh and free from any sign of the CMS which generated it.
+        </p>
+        <p>
+          Deploy your site on any static server. Done.
+        </p>
+
+        <hr>
+
+        <h2 id="hosting">Hosting possibilities</h2>
+        <p>
+          Your site output is simple to host. It is a collection of static files which means it will <em>fly</em> if you host it somewhere like <a href="http://github.com/ghpages">GitHub Pages</a>, <a href="">Amazon S3</a> or even <a href="">Dropbox</a>.
+        </p>
+        <p>
+          But what about hosting the admin site? The choice is yours, but some scenarios are:
+        </p>
+        <ul>
+          <li>Host it on a development or staging server for your content editting team to use.</li>
+          <li>Push your HTML to us and let us generate and <a href="">host your admin site for you</a>. Yep, that's <em>CMS As A Service</em>. We can generate your site from your HTML and the content you manage on the site, and then push the output wherever you like. </li>
+        </ul>
+
+        <hr>
+
+        <h2 id="docs">Documentation</h2>
+        <p>
+          You can use CherryGlass without installing anything at all. Just take one minute to <a href="">register</a> and then start pushing your HTML to us.
+        </p>
+        <p>
+          It's better to test your CMS locally first though. Luckily, installing CherryGlass and giving it a spin is simple.
+        </p>
+        <h3>Installation</h3>
+        <p>
+          Ensure that <a href="http://nodejs.org">NodeJS</a> is installed before we begin. Then clone the project into your project directory:
+        </p>
+        <pre><code>$ git clone https://github.com/philhawksworth/cherrycms.git</code></pre>
+        <p>
+          Install the dependancies with NPM (which is installed with NodeJS)
+        </p>
+        <pre><code>$ cd cherrycms
+$ npm install
+$ cd ..</code></pre>
+        <p>
+          Run CherryGlass with NodeJS
+        </p>
+        <pre><code>$ node cherrycms</code></pre>
+        <p>
+          Now you can point your browser at <code>http://localhost:3000/cherrycms</code> and start managing content.
+        </p>
+
+        <hr>
+
+        <h3>Syntax reference</h3>
+        <p>
+          CherryGlass is intentionally simple, so there is not a lot of syntax to learn. Just a few data attributes.
+        </p>
+
+        <table>
+          <tbody><tr>
+            <th class="attribute">Attribute</th><th>Description</th>
+          </tr>
+          <tr>
+            <td><code>data-cherry-id</code></td><td>A unique identifier on the page. (required)</td>
+          </tr>
+          <tr>
+            <td><code>data-cherry-type</code></td><td>The type of element to manage. See below. (required)</td>
+          </tr>
+          <tr>
+            <td><code>data-cherry-label</code></td><td>Optionally add a friendly label for this element when it appears in forms of the admin site. Otherwise you'll see it labeled with its ID.</td>
+          </tr>
+          <tr>
+            <td><code>data-cherry-help</code></td><td>Optionally add some description or guidance in the admin site for this element.</td>
+          </tr>
+        </tbody></table>
+
+        <p>The <code>data-cherry-type</code> attribute supports the following content types</p>
+
+        <table>
+          <tbody><tr>
+            <th class="attribute">Type</th><th>Description</th>
+          </tr>
+          <tr>
+            <td><code>text</code></td><td>A simple text field. Admin site shows a text input field</td>
+          </tr>
+          <tr>
+            <td><code>blob</code></td><td>A larger text field. Admin site shows a textarea input field</td>
+          </tr>
+          <tr>
+            <td><code>markdown</code></td><td>Text entered in <a href="">markdown</a> is interpreted and injected into the site as HTML. Admin site shows a textarea input field</td>
+          </tr>
+        </tbody></table>
+
+
+      </section>
+      <footer>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+
+  </body>
+</html>
