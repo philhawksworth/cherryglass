@@ -66,13 +66,13 @@
 
           {% if message == 'generated' %}
             {% include "includes/generated.html" %}
-          {% else if message == 'saved' %}
+          {% elif message == 'saved' %}
             {% include "includes/datasaved.html" %}
-          {% else if message == 'exported' %}
+          {% elif message == 'exported' %}
             {% include "includes/jsonified.html" %}
-          {% else if message == 'ingested' %}
+          {% elif message == 'ingested' %}
             {% include "includes/ingested.html" %}
-          {% else if message == 'ingest-error' %}
+          {% elif message == 'ingest-error' %}
             {% include "includes/ingest-error.html" %}
           {% endif %}
 

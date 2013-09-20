@@ -1,0 +1,5 @@
+{% macro input(text, name) %}
+  text: {{ text }}
+  name: {{ name}}
+  {% if error %} ERROR {% endif %}>
+{% endmacro %}

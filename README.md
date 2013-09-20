@@ -22,7 +22,7 @@ A very light CMS for adding manageable content to your static sites.
 
 - in the project route, run `node cherryglass` to start the admin site
 - open your browser at `localhost:3000/cms` to access the admin site
-- CherryGlass will inspect your static html files and create a CMS admin site tailored to the "data cherries" that it finds in your markup. Details of the supported data-types and syntax are listed below and from within the admin site at `/cherrycsc/docs`
+- CherryGlass will inspect your static html files and create a CMS admin site tailored to the "data cherries" that it finds in your markup. Details of the supported data-types and syntax are listed below and from within the admin site at `/cms/docs`
 
 
 
