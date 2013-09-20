@@ -1,12 +1,4 @@
-{% macro input(text, name) %}
-  text: {{ text }}
-  name: {{ name}}
-  {% if error %} ERROR {% endif %}>
-{% endmacro %}
-
-
 {% macro text(id, item) %}
-
   {% if item.label %}
     <label for="{{ id }}">{{item.label}}</label>
   {% else %}
@@ -16,5 +8,44 @@
   {% if item.help %}
     <span class="help-block">{{item.help}}</span>
   {% endif %}
-
 {% endmacro %}
+
+
+{% macro blob(id, item) %}
+  {% if item.label %}
+    <label for="{{ id }}">{{item.label}}</label>
+  {% else %}
+    <label for="{{ id }}">{{ id }}</label>
+  {% endif %}
+    <textarea cols="30" rows="10" id="{{ id }}" name="{{item.type}}:{{ id }}" class="input-xxlarge" >{{item.value}}</textarea>
+  {% if item.help %}
+    <span class="help-block">{{item.help}}</span>
+  {% endif %}
+{% endmacro %}
+
+
+{% macro link(id, item) %}
+  {% if item.label %}
+    <label for="{{ id }}:href">{{item.label}} (Address) </label>
+  {% else %}
+    <label for="{{ id }}:href">{{ id }} (Address)</label>
+  {% endif %}
+     <input type="text" id="{{ id }}:href" name="href:{{ id }}" value="{{item.href}}" class="input-xlarge" />
+  {% if item.label %}
+    <label for="{{ id }}:text">{{item.label}} (Link text)</label>
+  {% else %}
+    <label for="{{ id }}:text">{{ id }} (Link text)</label>
+  {% endif %}
+     <input type="text" id="{{ id }}:text" name="text:{{ id }}" value="{{item.value}}" class="input-xlarge" />
+  {% if item.help %}
+    <span class="help-block">{{item.help}}</span>
+  {% endif %}
+{% endmacro %}
+
+
+
+
+
+
+
+

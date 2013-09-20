@@ -13,73 +13,27 @@
    {% endblock pagelist %}
 
    {% block content %}
-  {% import '../macros/formmacros.html' as form %}
-
 
    <form action="/cms/page/{{ file }}" method="post">
-
       <legend>Content for management in <em>{{ file }}</em></legend>
-
+      {% import '../macros/formmacros.html' as form %}
       {% for item in content[file].cherries %}
-
         {% if item.type == 'text' %}
           {{ form.text(loop.key, item) }}
+        {% elif item.type == 'blob' %}
+          {{ form.blob(loop.key, item) }}
+        {% elif item.type == 'markdown' %}
+          {{ form.blob(loop.key, item) }}
+        {% elif item.type == 'link' %}
+          {{ form.link(loop.key, item) }}
         {% endif %}
-
-        {% if item.type == 'markdown' %}
-          {% if item.label %}
-            <label for="{{loop.key}}">{{item.label}}</label>
-          {% else %}
-            <label for="{{loop.key}}">{{loop.key}}</label>
-          {% endif %}
-            <textarea cols="30" rows="10" id="{{loop.key}}" name="{{item.type}}:{{loop.key}}" class="input-xxlarge" >{{item.value}}</textarea>
-          {% if item.help %}
-            <span class="help-block">{{item.help}}</span>
-          {% endif %}
-         {% endif %}
-
-        {% if item.type == 'blob' %}
-          {% if item.label %}
-            <label for="{{loop.key}}">{{item.label}}</label>
-          {% else %}
-            <label for="{{loop.key}}">{{loop.key}}</label>
-          {% endif %}
-            <textarea cols="30" rows="10" id="{{loop.key}}" name="{{item.type}}:{{loop.key}}" class="input-xxlarge" >{{item.value}}</textarea>
-          {% if item.help %}
-            <span class="help-block">{{item.help}}</span>
-          {% endif %}
-         {% endif %}
-
-
-        {% if item.type == 'link' %}
-          {% if item.label %}
-            <label for="{{loop.key}}:href">{{item.label}} (Address) </label>
-          {% else %}
-            <label for="{{loop.key}}:href">{{loop.key}} (Address)</label>
-          {% endif %}
-             <input type="text" id="{{loop.key}}:href" name="href:{{loop.key}}" value="{{item.href}}" class="input-xlarge" />
-          {% if item.label %}
-            <label for="{{loop.key}}:text">{{item.label}} (Link text)</label>
-          {% else %}
-            <label for="{{loop.key}}:text">{{loop.key}} (Link text)</label>
-          {% endif %}
-             <input type="text" id="{{loop.key}}:text" name="text:{{loop.key}}" value="{{item.value}}" class="input-xlarge" />
-          {% if item.help %}
-            <span class="help-block">{{item.help}}</span>
-          {% endif %}
-         {% endif %}
-
-
-
       {% endfor %}
-
       <p>
          <div class="btn-group">
             <a class="btn" href="/cms">Cancel</a>
             <button type="submit" class="btn btn-primary">Save data</button>
          </div>
       </p>
-
    </form>
 
    {% endblock content %}

@@ -366,10 +366,6 @@ cherry.generate = function(req, res){
       cherry.inject();
     });
   }
-
-  console.log("Generate ---- ", cherry.data);
-
-
   res.render('admin', { title: 'Cherry cms', message: "generated", content: cherry.data });
 };
 
