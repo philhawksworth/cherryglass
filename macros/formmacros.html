@@ -44,15 +44,25 @@
 
 
 {% macro collection(id, item) %}
-  {% if item.label %}
-    <label for="{{ id }}">{{item.label}}</label>
-  {% else %}
-    <label for="{{ id }}">{{ id }}</label>
-  {% endif %}
-    <textarea cols="30" rows="10" id="{{ id }}" name="{{item.type}}:{{ id }}" class="input-xxlarge" >{{item.value}}</textarea>
-  {% if item.help %}
-    <span class="help-block">{{item.help}}</span>
-  {% endif %}
+
+  <fieldset>
+    <legend>{{ id }}</legend>
+    {% for cherry in item.cherries  %}
+      {% if cherry.type == 'text' %}
+        {{ text(loop.key, cherry) }}
+      {% elif cherry.type == 'blob' %}
+        {{ blob(loop.key, cherry) }}
+      {% elif cherry.type == 'markdown' %}
+        {{ blob(loop.key, cherry) }}
+      {% elif cherry.type == 'link' %}
+        {{ link(loop.key, cherry) }}
+      {% endif %}
+    {% endfor %}
+    <hr>
+    <button class="btn">Add</button>
+  </fieldset>
+
+
 {% endmacro %}
 
 

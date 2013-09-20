@@ -1,8 +1,8 @@
 {
-  "name": "GlassCherryCMS",
+  "name": "CherryGLassCMS",
   "version": "0.0.2",
   "description": "A very lightweight CMS indeed",
-  "main": "cherry.js",
+  "main": "cherryglass.js",
   "dependencies": {
     "express": "3.3.4",
     "ejs": "*",
