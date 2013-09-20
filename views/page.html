@@ -13,29 +13,17 @@
    {% endblock pagelist %}
 
    {% block content %}
+  {% import '../macros/formmacros.html' as form %}
+
 
    <form action="/cms/page/{{ file }}" method="post">
 
       <legend>Content for management in <em>{{ file }}</em></legend>
+
       {% for item in content[file].cherries %}
 
         {% if item.type == 'text' %}
-
-          <h3>TEXT</h3>
-
-          {% import '../macros/formmacros.html' as form %}
-          {{ form.input("text", "name") }}
-
-{#           {% if item.label %}
-            <label for="{{loop.key}}">{{item.label}}</label>
-          {% else %}
-            <label for="{{loop.key}}">{{loop.key}}</label>
-          {% endif %}
-            <input type="text" id="{{loop.key}}" name="{{item.type}}:{{loop.key}}" value="{{item.value}}" class="input-xxlarge" />
-          {% if item.help %}
-            <span class="help-block">{{item.help}}</span>
-          {% endif %}
- #}
+          {{ form.text(loop.key, item) }}
         {% endif %}
 
         {% if item.type == 'markdown' %}

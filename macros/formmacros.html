@@ -3,3 +3,18 @@
   name: {{ name}}
   {% if error %} ERROR {% endif %}>
 {% endmacro %}
+
+
+{% macro text(id, item) %}
+
+  {% if item.label %}
+    <label for="{{ id }}">{{item.label}}</label>
+  {% else %}
+    <label for="{{ id }}">{{ id }}</label>
+  {% endif %}
+    <input type="text" id="{{ id }}" name="{{item.type}}:{{ id }}" value="{{item.value}}" class="input-xxlarge" />
+  {% if item.help %}
+    <span class="help-block">{{item.help}}</span>
+  {% endif %}
+
+{% endmacro %}
