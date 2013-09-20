@@ -37,7 +37,7 @@ app.use(app.router);
 app.use('/static', express.static(__dirname + '/static'));
 app.use('/', express.static(__dirname + cherry.data.config.site_dir));
 
-// swig.init({ root: __dirname + '/views' });
+
 
 // development only
 if ('development' == app.get('env')) {
@@ -240,16 +240,16 @@ cherry.pick = function() {
               value:  $(this).html().trim()
             };
 
-            // also handle link types
+            //  handle link types
             if(cherry_obj.type == 'link'){
               cherry_obj.href = $(this).attr('href');
             }
-
-            // TODO : handle collections
-            // if(cherry_obj.type == 'collection'){
-            //   console.log("collection:", cherry_obj.value );
-            //   cherry_obj.template = cherry_obj.value;
-            // }
+            // or handle collection types
+            else if (cherry_obj.type == 'collection') {
+              cherry_obj.template = cherry_obj.value;
+              cherry_obj.cherries = cherry.inspect(cherry_obj.template);
+              cherry_obj.value = null;
+            }
 
             cherry.lodge(file.replace(__dirname + cherry.data.config.src_dir + "/", ""), title, cherry_obj);
           });
@@ -259,6 +259,36 @@ cherry.pick = function() {
   });
 
 };
+
+
+/*
+  inspect an html fragement and return the cherries it contains
+ */
+cherry.inspect = function(html) {
+
+  var $ = cheerio.load(html);
+  var bits = [];
+
+  $('[data-cherry-id]').each(function(i, elem) {
+    var cherry_obj = {
+      id:   $(this).attr('data-cherry-id'),
+      type:   $(this).attr('data-cherry-type'),
+      label:  $(this).attr('data-cherry-label'),
+      help:   $(this).attr('data-cherry-help'),
+      value:  $(this).html().trim()
+    };
+
+    //  handle link types
+    if(cherry_obj.type == 'link'){
+      cherry_obj.href = $(this).attr('href');
+    }
+    bits.push(cherry_obj);
+  });
+
+  console.log("Inspected and found cherries: ", bits);
+  return bits;
+};
+
 
 /*
   Clone a directory
