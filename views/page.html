@@ -20,13 +20,8 @@
       {% for item in content[file].cherries %}
 
          {% if item.type == 'text' %}
-         {% import "includes/form-text.html" as form %}
 
-         {{ form(loop.key, item.type, item.value, item.label, item.help) }}
-         {{ form("loop.key", "item.type", "item.value", "item.label", "item.help") }}
-
-
-{#           {% if item.label %}
+          {% if item.label %}
             <label for="{{loop.key}}">{{item.label}}</label>
           {% else %}
             <label for="{{loop.key}}">{{loop.key}}</label>
@@ -34,7 +29,7 @@
             <input type="text" id="{{loop.key}}" name="{{item.type}}:{{loop.key}}" value="{{item.value}}" class="input-xxlarge" />
           {% if item.help %}
             <span class="help-block">{{item.help}}</span>
-          {% endif %} #}
+          {% endif %}
          {% endif %}
 
         {% if item.type == 'markdown' %}

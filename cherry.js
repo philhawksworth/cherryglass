@@ -197,8 +197,6 @@ cherry.ingest = function(req, res){
   cherry.data.config.src_dir = req.body['source'];
   cherry.data.config.site_dir = req.body['output'];
 
-  // TODO : create the output directory if it doesn't already exist.
-
   if (req.body['html']) {
     console.log("Generating CMS from site source....");
     cherry.pick();
@@ -211,11 +209,8 @@ cherry.ingest = function(req, res){
       }
       console.log("Using data.json as the source for the CMS.");
     });
-
   }
 
-  // render a confirmation
-  // res.render('admin', { title: 'cherry cms', message: message, content: cherry.data });
   res.redirect('/cms');
 };
 
@@ -338,7 +333,6 @@ cherry.inject = function() {
     });
 
   });
-
 
 };
 
