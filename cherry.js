@@ -246,7 +246,7 @@ cherry.pick = function() {
               cherry_obj.href = $(this).attr('href');
             }
 
-            // handle collections
+            // TODO : handle collections
             if(cherry_obj.type == 'collection'){
               console.log("collection:", cherry_obj.value );
               cherry_obj.template = cherry_obj.value;
@@ -300,8 +300,8 @@ cherry.inject = function() {
         // also remove the data-cherry attributes to eliminate any smells
         $('[data-cherry-id]').each(function(i, elem) {
           var cherrytag = {
-            id:     $(this).attr('data-cherry-id'),
-            type:   $(this).attr('data-cherry-type')
+            id: $(this).attr('data-cherry-id'),
+            type: $(this).attr('data-cherry-type')
           };
           var data = cherry.pluck(file, cherrytag.id);
 
@@ -346,7 +346,7 @@ cherry.generate = function(req, res){
   var source_dir = __dirname + cherry.data.config.src_dir;
 
   // clean up or create the output directory and
-  // replicate the source directory as the output
+  // replicate the source directory as the initial output
   if (fs.existsSync(out_dir)) {
     console.log("CLeaning output directory.");
       rimraf(out_dir, function() {

@@ -44,6 +44,19 @@
           {% endif %}
          {% endif %}
 
+        {% if item.type == 'blob' %}
+          {% if item.label %}
+            <label for="{{loop.key}}">{{item.label}}</label>
+          {% else %}
+            <label for="{{loop.key}}">{{loop.key}}</label>
+          {% endif %}
+            <textarea cols="30" rows="10" id="{{loop.key}}" name="{{item.type}}:{{loop.key}}" class="input-xxlarge" >{{item.value}}</textarea>
+          {% if item.help %}
+            <span class="help-block">{{item.help}}</span>
+          {% endif %}
+         {% endif %}
+
+
         {% if item.type == 'link' %}
           {% if item.label %}
             <label for="{{loop.key}}:href">{{item.label}} (Address) </label>
