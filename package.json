@@ -1,7 +1,11 @@
 {
-  "name": "CherryGLassCMS",
+  "name": "CherryglassCMS",
   "version": "0.0.2",
   "description": "A very lightweight CMS indeed",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/philhawksworth/cherryglass.git"
+  },
   "main": "cherryglass.js",
   "dependencies": {
     "express": "3.3.4",
@@ -12,13 +16,16 @@
     "consolidate": "*",
     "extend": "*",
     "ncp": "*",
-    "marked": "*"
+    "marked": "*",
+    "node-datastore": "*"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "mocha": "*",
+    "should": "1.3.0"
+  },
   "engines": {
     "node": ">=0.10.1"
   },
-  "repository": "",
   "keywords": [
     "cms",
     "static"
