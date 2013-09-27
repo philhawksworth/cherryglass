@@ -1,0 +1,17 @@
+{
+	"fixture-page-one.html": {
+		"pagetitle": "Fixture page one",
+		"cherries": {
+			"cherry-one": {
+				"id": "cherry-one",
+				"type": "text",
+				"value": "text value of cherry one"
+			},
+			"cherry-two": {
+				"id": "cherry-two",
+				"type": "blob",
+				"value": "text value of cherry two"
+			}
+		}
+	}
+}

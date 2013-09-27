@@ -1,7 +1,7 @@
 {
   "name": "CherryglassCMS",
   "version": "0.0.2",
-  "description": "A very lightweight CMS indeed",
+  "description": "A very lightweight CMS for static sites",
   "repository": {
     "type": "git",
     "url": "git://github.com/philhawksworth/cherryglass.git"

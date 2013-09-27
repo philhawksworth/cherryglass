@@ -149,9 +149,13 @@ cherryglass.contentSubmission = function(req, res){
 };
 
 
-/*
-	lodge an element in the model for management
- */
+/**
+*	lodge an element in the model for management
+*
+*  @param {String} file
+*  @param {String} title
+*  @param {Object} data
+*/
 cherryglass.lodge = function(file, title, data) {
 
   // Defaults to extend.
@@ -190,9 +194,13 @@ cherryglass.update = function(file, id, value, href, entry) {
 };
 
 
-/*
-	pluck the data for a cherry from the data store
- */
+/**
+*	pluck the data for a cherry from the data store
+*
+* @param {String} file
+* @para, {String} id
+* @return {Object}
+*/
 cherryglass.pluck = function(file, id) {
 	return cherryglass.data.files[file].cherries[id];
 };
@@ -282,9 +290,12 @@ cherryglass.pick = function() {
 };
 
 
-/*
-  inspect an html fragement and return the cherries it contains
- */
+/**
+*  inspect an html fragement and return the cherries it contains
+*
+* @param {String} html
+* @return {Object}
+*/
 cherryglass.inspect = function(html) {
 
   var $ = cheerio.load(html);
@@ -440,14 +451,9 @@ cherryglass.saveData = function() {
  Add a cherry to the data store
  */
 cherryglass.addCherry = function(obj) {
-
   db.insertRow(obj);
-
   var r = getRowByIndex(obj.id);
   console.log("new row: ", r);
-
-
-
 };
 
 
