@@ -69,6 +69,39 @@ describe('cherryglass.getCherry()', function(){
 
 
 
+/*
+
+Routes
+
+Parsing
+  text
+  blob
+  markdown
+  link
+  image
+  collection
+
+Storage
+  Save cherry
+  Update cherry
+  Get cherry
+
+Files
+  Read source directory
+  Write site directory
+  Replicate source directory
+  Output datastore as json
+
+Manipulation
+  Replace
+  Cleanup
+
+
+ */
+
+
+
+
 
 
 
