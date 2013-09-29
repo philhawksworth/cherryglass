@@ -32,12 +32,14 @@ describe('cherryglass.loadData()', function(){
   });
 
   it("should add a files object to cherryglass.data", function(){
+    // cherryglass.loadData(cherryglass.data.config.data_file);
     cherryglass.data.should.have.property('files');
     var type = typeof cherryglass.data.files;
     type.should.equal('object');
   });
 
   it("should populate the data object with a file object", function(){
+    // cherryglass.loadData(cherryglass.data.config.data_file);
     cherryglass.data.files.should.have.property('fixture-page-one.html');
   });
 
@@ -51,13 +53,18 @@ describe('cherryglass.getCherry()', function(){
   });
 
   it("should return an object when passed a file name and a cherry id", function(){
+    // cherryglass.loadData(cherryglass.data.config.data_file);
     var cherry = cherryglass.getCherry('fixture-page-one.html', 'cherry-one');
     var type = typeof cherry;
     type.should.equal('object');
   });
 
-  it("should return a cherry object with the correct contents", function(){
-
+  it("should return a cherry object with the correct attributes", function(){
+    // cherryglass.loadData(cherryglass.data.config.data_file);
+    var cherry = cherryglass.getCherry('fixture-page-one.html', 'cherry-one');
+    cherry.id.should.equal("cherry-one");
+    cherry.type.should.equal("text");
+    cherry.value.should.equal("text value of cherry one");
   });
 
 });

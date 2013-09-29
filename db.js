@@ -6,7 +6,7 @@ var fs = require('fs'),
 var cherryglass = {
 	data: {
 		config: {
-			data_file: "db.test.json"
+			data_file: null
 		}
 	}
 };
@@ -55,20 +55,15 @@ cherryglass.loadData = function(file) {
 /**
 * writeData : wrote the data store back to the file system
 *
-* @param {String}	data
 * @param {String}	file
 */
-cherryglass.writeData = function(data) {
-
+cherryglass.writeData = function(file) {
+	var file = __dirname + file;
+	var data = JSON.stringify(cherryglass.data);
+	fs.writeFile(file, data, function (err) {
+		if (err) throw err;
+	});
 };
 
 
 module.exports = cherryglass;
-
-
-
-
-
-
-
-

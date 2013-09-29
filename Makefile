@@ -2,6 +2,7 @@ SRC = tests/db.test.js
 
 test:
 	@./node_modules/.bin/mocha \
-		--reporter spec
+		--reporter spec\
+		--ui tdd
 
 .PHONY: test

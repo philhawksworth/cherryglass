@@ -8,8 +8,7 @@ var express = require('express'),
     swig = require('swig'),
     marked = require('marked'),
     rimraf = require('rimraf'),
-    extend = require('extend'),
-    DataStore = require("node-datastore");
+    extend = require('extend');
 
 var app = express();
 
@@ -24,9 +23,6 @@ var cherryglass = {
     files : {}
   }
 };
-
-module.exports = cherryglass;
-
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -326,19 +322,6 @@ cherryglass.inspect = function(html) {
 
 
 /*
-  Clone a directory
- */
-// cherry.clone = function(source, dest) {
-//   console.log("Clone: ", source, dest );
-//   ncp(source, dest, function (err) {
-//     if (err) {
-//       return console.error(err);
-//     }
-//   });
-// };
-
-
-/*
   Make the content subsitution into the file.
  */
 cherryglass.inject = function() {
@@ -457,17 +440,6 @@ cherryglass.addCherry = function(obj) {
 };
 
 
-cherryglass.initdb = function() {
-
-  var store = {
-    files: {},
-    globals: {}
-  };
-  cherryglass.db = new DataStore(store);
-
-};
-
-
 /*
    Define routes
 */
@@ -478,8 +450,6 @@ app.get('/cms/generate', cherryglass.generate);
 app.get('/cms/docs', cherryglass.docs);
 app.post('/cms/ingest', cherryglass.ingest);
 
-cherryglass.initdb();
-
 
 /*
 	Spin up the server
@@ -488,3 +458,5 @@ http.createServer(app).listen(app.get('port'), function(){
   console.log('Starting the CherryCMS server');
 	console.log('Visit http://localhost:' + app.get('port') + '/cms to manage your content.');
 });
+
+module.exports = cherryglass;

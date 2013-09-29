@@ -26,8 +26,8 @@
           {{ form.blob(loop.key, item) }}
         {% elif item.type == 'link' %}
           {{ form.link(loop.key, item) }}
-        {% elif item.type == 'collection' %}
-          {{ form.collection(loop.key, item) }}
+{#         {% elif item.type == 'collection' %}
+          {{ form.collection(loop.key, item) }} #}
         {% endif %}
       {% endfor %}
       <p>

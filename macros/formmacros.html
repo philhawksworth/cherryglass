@@ -66,6 +66,7 @@
           {{ blob(id, item) }}
         {% elif item.type == 'link' %}
           {{ link(id, item) }}
+        {% endif%}
       {% endfor %}
     {% endfor %}
     <hr>
