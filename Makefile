@@ -1,4 +1,4 @@
-SRC = tests/db.test.js
+SRC = tests/cherryglass.js
 
 test:
 	@./node_modules/.bin/mocha \
