@@ -166,7 +166,7 @@ cherryglass.lodge = function(file, title, data) {
 		cherryglass.data.files[file] = {"pagetitle": title, "cherries": {}};
 	}
   cherryglass.data.files[file].cherries[obj.id] = obj;
-  cherryglass.saveData();
+  cherryglass.writeData(cherryglass.data.config.data_file);
 };
 
 
@@ -184,9 +184,7 @@ cherryglass.update = function(file, id, value, href, entry) {
   if (entry) {
    targetCherry.entries[entry.index].cherries[entry.cherry.id].value = entry.cherry.value;
   }
-
-
-  cherryglass.saveData();
+  cherryglass.writeData(cherryglass.data.config.data_file);
 };
 
 
@@ -418,26 +416,61 @@ cherryglass.generate = function(req, res){
 };
 
 
-/*
-	Save the data as a JSON file
- */
-cherryglass.saveData = function() {
-	var file = __dirname + cherryglass.data.config.data_file;
-	var data = JSON.stringify(cherryglass.data);
-	fs.writeFile(file, data, function (err) {
-		if (err) throw err;
-	});
+/**
+* getCherry : get the cherry data from the store
+* The optional entry parameter alows us to access child cherries in collections.
+*
+* @param {String} file
+* @param {String} id
+* @param {Int} entry
+*/
+cherryglass.getCherry = function(file, id, entry) {
+  return cherryglass.data.files[file].cherries[id];
 };
 
 
-/*
- Add a cherry to the data store
- */
-cherryglass.addCherry = function(obj) {
-  db.insertRow(obj);
-  var r = getRowByIndex(obj.id);
-  console.log("new row: ", r);
+/**
+* setCherry : set the cherry data in the store*
+* The optional entry parameter alows us to access child cherries in collections.
+* The cherry object contains all cherry data.
+*
+* @param {String} file
+* @param {String} id
+* @param {Object} cherry
+* @param {Int} entry
+*/
+cherryglass.setCherry = function(file, id, cherry, entry) {
+
 };
+
+
+/**
+* loadData : read the data store from the file system into the data object.
+*
+* @param {String} file
+*/
+cherryglass.loadData = function(file) {
+  var contents = fs.readFileSync(__dirname + "/" + file, 'utf-8');
+  cherryglass.data.files = JSON.parse(contents);
+};
+
+
+/**
+* writeData : wrote the data store back to the file system
+*
+* @param {String} file
+*/
+cherryglass.writeData = function(file) {
+  var path = __dirname + file;
+  var data = JSON.stringify(cherryglass.data);
+  fs.writeFile(path, data, function (err) {
+    if (err) throw err;
+  });
+};
+
+
+// expose the cherryglass object.
+module.exports = cherryglass;
 
 
 /*
@@ -459,4 +492,4 @@ http.createServer(app).listen(app.get('port'), function(){
 	console.log('Visit http://localhost:' + app.get('port') + '/cms to manage your content.');
 });
 
-module.exports = cherryglass;
+

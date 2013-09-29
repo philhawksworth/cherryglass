@@ -1,12 +1,10 @@
 
-var cherryglass = require("../db.js"),
+var cherryglass = require("../cherryglass.js"),
     assert = require('should');
 
 
 // setup the fixtures
 cherryglass.data.config.data_file = "test/fixtures/db.test.json";
-
-
 
 
 
@@ -64,7 +62,7 @@ describe('cherryglass.getCherry()', function(){
     var cherry = cherryglass.getCherry('fixture-page-one.html', 'cherry-one');
     cherry.id.should.equal("cherry-one");
     cherry.type.should.equal("text");
-    cherry.value.should.equal("text value of cherry one");
+    cherry.value.should.equal("text value of cherry one in file one");
   });
 
 });
