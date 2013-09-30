@@ -235,39 +235,6 @@ cherryglass.pick = function() {
 };
 
 
-/**
-*  inspect an html fragement and return the cherries it contains
-*
-* @param {String} html
-* @return {Object}
-*/
-cherryglass.inspect = function(html) {
-
-	var $ = cheerio.load(html);
-	var bits = {
-		cherries : {}
-	};
-
-	$('[data-cherry-id]').each(function(i, elem) {
-
-		var obj = {
-			id:     $(this).attr('data-cherry-id'),
-			type:   $(this).attr('data-cherry-type'),
-			label:  $(this).attr('data-cherry-label'),
-			help:   $(this).attr('data-cherry-help'),
-			value:  $(this).html().trim()
-		};
-
-		//  handle link types
-		if(obj.type == 'link'){
-			obj.href = $(this).attr('href');
-		}
-
-		bits.cherries[obj.id] = obj;
-	});
-
-	return bits;
-};
 
 
 /*
@@ -357,6 +324,35 @@ cherryglass.generate = function(req, res){
 		});
 	}
 	res.render('admin', { title: 'Cherry cms', message: "generated", content: cherryglass.data });
+};
+
+
+/**
+*  inspect an html fragement and return the cherries it contains
+*
+* @param {String} html
+* @return {Object}
+*/
+cherryglass.inspect = function(html) {
+	var $ = cheerio.load(html);
+	var bits = {
+		cherries : {}
+	};
+	$('[data-cherry-id]').each(function(i, elem) {
+		var obj = {
+			id:     $(this).attr('data-cherry-id'),
+			type:   $(this).attr('data-cherry-type'),
+			label:  $(this).attr('data-cherry-label'),
+			help:   $(this).attr('data-cherry-help'),
+			value:  $(this).html().trim()
+		};
+		//  handle link types
+		if(obj.type == 'link'){
+			obj.href = $(this).attr('href');
+		}
+		bits.cherries[obj.id] = obj;
+	});
+	return bits;
 };
 
 
@@ -457,7 +453,7 @@ app.post('/cms/ingest', cherryglass.ingest);
 	Spin up the server
  */
 http.createServer(app).listen(app.get('port'), function(){
-	console.log('Starting the CherryCMS server');
+	console.log('Starting the Cherryglass CMS server');
 	console.log('Visit http://localhost:' + app.get('port') + '/cms to manage your content.');
 });
 

@@ -183,44 +183,54 @@ describe('cherryglass.setCherry()', function(){
 		cherryglass.data.files[file.name].should.have.property("pagetitle", file.title);
 	});
 	
-
 	it("should update a collection entry");
 	
-
 });
 
 
 
+describe("cherryglass.inspect()", function() {
 
-/*
+	it("should return an object with no cherries when none are found", function(){
+		var obj = cherryglass.inspect("<p>foo</p>");
+		var t = typeof obj;
+		t.should.equal("object");
+		obj.should.have.property("cherries");
+	});
+	
+	it("should detect data-cherry-id attributes and return a cherry", function(){
+		var obj = cherryglass.inspect("<p data-cherry-id='foo-cherry'>foo</p>");
+		obj.cherries.should.have.property("foo-cherry");
+	});
+	
+	it("should detect data-cherry-id attributes and return a cherry with the inner html as the value", function(){
+		var obj = cherryglass.inspect("<p data-cherry-id='foo-cherry'>foo</p>");
+		obj.cherries['foo-cherry'].should.have.property("value", "foo");
+	});
 
-Routes
+	it("should detect data-cherry-id and data-cherry-type attributes and return a cherry with the correct properties", function(){
+		var obj = cherryglass.inspect("<p data-cherry-id='foo-cherry' data-cherry-type='the-type'>foo</p>");
+		obj.cherries['foo-cherry'].should.have.property("type", "the-type");
+	});
 
-Parsing
-	text
-	blob
-	markdown
-	link
-	image
-	collection
+	it("should detect data-cherry-id and data-cherry-label attributes and return a cherry with the correct properties", function(){
+		var obj = cherryglass.inspect("<p data-cherry-id='foo-cherry' data-cherry-label='the label'>foo</p>");
+		obj.cherries['foo-cherry'].should.have.property("label", "the label");
+	});
 
-Storage
-	Save cherry
-	Update cherry
-	Get cherry
+	it("should detect data-cherry-id and data-cherry-help attributes and return a cherry with the correct properties", function(){
+		var obj = cherryglass.inspect("<p data-cherry-id='foo-cherry' data-cherry-help='some help text'>foo</p>");
+		obj.cherries['foo-cherry'].should.have.property("help", "some help text");
+	});
 
-Files
-	Read source directory
-	Write site directory
-	Replicate source directory
-	Output datastore as json
+	it("should add an href attribute to cherries which are of the type, link", function(){
+		var obj = cherryglass.inspect("<a data-cherry-id='foo-cherry' data-cherry-type='link' href='link-url'>link text</a>");
+		obj.cherries['foo-cherry'].should.have.property("href", "link-url");
+		obj.cherries['foo-cherry'].should.have.property("value", "link text");
+	});
+	
+});
 
-Manipulation
-	Replace
-	Cleanup
-
-
- */
 
 
 
