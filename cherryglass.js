@@ -436,7 +436,7 @@ cherryglass.setCherry = function(file, id, cherry, entry) {
 	}
 	
 
-	// cherryglass.writeData(cherryglass.data.config.data_file);
+	cherryglass.writeData(cherryglass.data.config.data_file);
 };
 
 

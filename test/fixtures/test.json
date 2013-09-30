@@ -2,7 +2,7 @@
   "config": {
     "src_dir": "/example",
     "site_dir": "/../site",
-    "data_file": "test/fixtures/db.test.json"
+    "data_file": "test/fixtures/test.out.json"
   },
   "attr": {
     "text": "value",
@@ -17,7 +17,7 @@
         "cherry-one": {
           "id": "cherry-one",
           "type": "text",
-          "value": "updated cherry one with help",
+          "value": "text value of cherry one in file one",
           "href": "http://alink.test",
           "label": "a label value to display",
           "help": "a help value to display"
@@ -26,10 +26,6 @@
           "id": "cherry-two",
           "type": "blob",
           "value": "text value of cherry two in file one"
-        },
-        "cherry-three": {
-          "id": "cherry-three",
-          "value": "a newly added cherry called three"
         }
       }
     },

@@ -4,7 +4,8 @@ var cherryglass = require("../cherryglass.js"),
 
 
 // setup the fixtures
-cherryglass.data.config.data_file = "test/fixtures/db.test.json";
+cherryglass.data.config.data_file = "test/fixtures/test.out.json";
+cherryglass.data.config.fixtures = "test/fixtures/test.json";
 
 
 
@@ -17,7 +18,7 @@ describe('Defaults', function(){
 
 	it('should have defaults stored', function(){
 		var config = cherryglass.data.config;
-		config.should.have.property("data_file", "test/fixtures/db.test.json");
+		config.should.have.property("data_file", "test/fixtures/test.out.json");
 	});
 
 });
@@ -26,7 +27,7 @@ describe('Defaults', function(){
 describe('cherryglass.loadData()', function(){
 
 	setup(function(){
-		cherryglass.loadData(cherryglass.data.config.data_file);
+		cherryglass.loadData("test/fixtures/test.json");
 	});
 
 	it("should add a files object to cherryglass.data", function(){
@@ -45,7 +46,7 @@ describe('cherryglass.loadData()', function(){
 describe('cherryglass.getCherry()', function(){
 
 	setup(function(){
-		cherryglass.loadData(cherryglass.data.config.data_file);
+		cherryglass.loadData("test/fixtures/test.json");
 	});
 
 	it("should return an object when passed a file name and a cherry id", function(){
@@ -69,7 +70,7 @@ describe('cherryglass.setCherry()', function(){
 	var file, id, new_cherry;
 
 	setup(function(){
-		cherryglass.loadData(cherryglass.data.config.data_file);
+		cherryglass.loadData("test/fixtures/test.json");
 		file = "fixture-page-one.html";
 		id = "cherry-one";
 	});
@@ -138,7 +139,7 @@ describe("cherryglass.setFile()", function(){
 
 	var existing_file, new_file, title;
 	setup(function(){
-		cherryglass.loadData(cherryglass.data.config.data_file);
+		cherryglass.loadData("test/fixtures/test.json");
 		existing_file = "fixture-page-two.html";
 		new_file = "fixture-page-three.html";
 	});
