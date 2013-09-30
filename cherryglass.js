@@ -128,24 +128,25 @@ cherryglass.showDataForm = function(req, res){
 */
 cherryglass.contentSubmission = function(req, res){
 
-	var file = req.params[0];
+	var file = { name: req.params[0] };
 
-	// inspect each field posted from the form
+	// inspect each field posted from the form and update it in the store.
 	for(var node in req.body) {
 		var type = node.split(":")[0];
 		var id = node.split(":")[1];
-		var cherry = {};
-		console.log("node" , req.body[node]);
+		var cherry = {
+			id: id
+		};
 		cherry[cherryglass.data.attr[type]] = req.body[node];
-		cherryglass.setCherry(file, id, cherry);
+		cherryglass.setCherry(file, cherry);
 	}
 
+	// save the new data to the file.
+	cherryglass.writeData(cherryglass.data.config.data_file);
+
 	// render a confirmation
-	res.render('page', { title: 'cherry cms', message: "saved", file: file, content: cherryglass.data.files });
+	res.render('page', { title: 'cherry cms', message: "saved", file: file.name, content: cherryglass.data.files });
 };
-
-
-
 
 
 
@@ -221,16 +222,16 @@ cherryglass.pick = function() {
 						// ignore first class cherries which are actually in a collection
 						var collection_member = $(this).parents('[data-cherry-type=collection]');
 						if(collection_member.length === 0) {
-							cherryglass.setCherry(file.replace(__dirname + cherryglass.data.config.src_dir + "/", ""), cherry_obj.id, cherry_obj);
+
+							var f = { name:  file.replace(__dirname + cherryglass.data.config.src_dir + "/", "")};
+							cherryglass.setCherry(f, cherry_obj);
 							cherryglass.writeData(cherryglass.data.config.data_file);
 						}
 
 					});
-
 				});
 			});
 	});
-
 };
 
 
@@ -372,45 +373,16 @@ cherryglass.getCherry = function(file, id, entry) {
 };
 
 
-
-
-
 /**
-*	lodge an element in the model for management
+* setFile : add a new file into the json data if needed.
 *
-*  @param {String} file
-*  @param {String} title
-*  @param {Object} data
+* @param {Object} file
 */
-cherryglass.lodge = function(file, title, data) {
-
-	// Defaults to extend.
-	var obj = {
-		"type": null,
-		"id": null,
-		"value": ""
-	};
-	obj = extend(obj, data);
-
-	if(!cherryglass.data.files[file]) {
-		cherryglass.data.files[file] = {"pagetitle": title, "cherries": {}};
-	}
-	cherryglass.data.files[file].cherries[obj.id] = obj;
-	cherryglass.writeData(cherryglass.data.config.data_file);
-};
-
-
-/**
-* setFile : add a new file into the json data
-*
-* @param {String} file
-* @param {String} title
-*/
-cherryglass.setFile = function(file, title) {
-	if(cherryglass.data.files[file] === undefined){
-		cherryglass.data.files[file] = {
+cherryglass.setFile = function(file) {
+	if(cherryglass.data.files[file.name] === undefined){
+		cherryglass.data.files[file.name] = {
 			"cherries" : {},
-			"pagetitle" : title ? title : file
+			"pagetitle" : file.title ? file.title : file.name
 		};
 	}
 };
@@ -422,20 +394,21 @@ cherryglass.setFile = function(file, title) {
 * The optional entry parameter alows us to access child cherries in collections.
 * The cherry object contains all cherry data.
 *
-* @param {String} file
-* @param {String} id
+* @param {Object} file
 * @param {Object} cherry
 * @param {Int} entry
 */
-cherryglass.setCherry = function(file, id, cherry, entry) {
-	var target = cherryglass.data.files[file].cherries[id];
+cherryglass.setCherry = function(file, cherry, entry) {
+
+	// ensure that the file has a corresponding object in the data store.
+	cherryglass.setFile(file);
+
+	var target = cherryglass.data.files[file.name].cherries[cherry.id];
 	if(!target) {
-		cherryglass.data.files[file].cherries[id] = cherry;
+		cherryglass.data.files[file.name].cherries[cherry.id] = cherry;
 	} else {
 		target = extend(target, cherry);
 	}
-	
-
 	cherryglass.writeData(cherryglass.data.config.data_file);
 };
 

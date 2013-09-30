@@ -17,6 +17,11 @@ A very light CMS for adding manageable content to your static sites.
 - install the dependancies with `npm install`
 
 
+## Running the tests
+
+To test the code, run `make test`
+
+
 
 ## Usage
 

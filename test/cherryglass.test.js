@@ -65,69 +65,124 @@ describe('cherryglass.getCherry()', function(){
 });
 
 
+describe("cherryglass.setFile()", function(){
+
+	var existing_file, new_file, title;
+	setup(function(){
+		cherryglass.loadData("test/fixtures/test.json");
+		existing_file = {
+			name : "fixture-page-two.html",
+			title : "Fixture page two title change"
+		};
+		new_file = {
+			name : "fixture-page-three.html",
+			title : "Fixture page three is new"
+		};
+	});
+
+	it("should do nothing if a file is already in the json", function(){
+		cherryglass.setFile(existing_file);
+		cherryglass.data.files[existing_file.name].should.have.property("pagetitle","Fixture page two");
+	});
+
+	it("should add a file to the json if it not currently present ", function(){
+		cherryglass.setFile(new_file);
+		cherryglass.data.files[new_file.name].should.have.property("pagetitle","Fixture page three is new");
+	});
+
+});
+
+
+
 describe('cherryglass.setCherry()', function(){
 
-	var file, id, new_cherry;
+	var file, new_cherry;
 
 	setup(function(){
 		cherryglass.loadData("test/fixtures/test.json");
-		file = "fixture-page-one.html";
-		id = "cherry-one";
 	});
 
 	it("should update a cherry value", function(){
 		new_cherry = {
+			id: "cherry-one",
 			value: "updated cherry one value"
 		};
-		cherryglass.setCherry(file, id, new_cherry);
-		var cherry = cherryglass.getCherry(file, id);
+		file = {
+			name: "fixture-page-one.html"
+		};
+		cherryglass.setCherry(file, new_cherry);
+		var cherry = cherryglass.getCherry(file.name, new_cherry.id);
 		cherry.value.should.equal(new_cherry.value);
 	});
-	
+
 	it("should update a cherry link href and text", function(){
+		file = {
+			name: "fixture-page-one.html"
+		};
 		new_cherry = {
 			value: "updated cherry one link text",
 			href: "http://alink.test"
 		};
-		cherryglass.setCherry(file, id, new_cherry);
-		var cherry = cherryglass.getCherry(file, id);
+		cherryglass.setCherry(file, new_cherry);
+		var cherry = cherryglass.getCherry(file.name, new_cherry.id);
 		cherry.value.should.equal(new_cherry.value);
 		cherry.href.should.equal(new_cherry.href);
 	});
 
 	it("should update a label if provided", function(){
+		file = {
+			name: "fixture-page-one.html"
+		};
 		new_cherry = {
 			value: "updated cherry one with label",
 			label: "a label value to display"
 		};
-		cherryglass.setCherry(file, id, new_cherry);
-		var cherry = cherryglass.getCherry(file, id);
+		cherryglass.setCherry(file, new_cherry);
+		var cherry = cherryglass.getCherry(file.name, new_cherry.id);
 		cherry.value.should.equal(new_cherry.value);
 		cherry.label.should.equal(new_cherry.label);
 	});
 	
-	it("should update a help if provided", function(){
+	it("should update help text if provided", function(){
+		file = {
+			name: "fixture-page-one.html"
+		};
 		new_cherry = {
 			value: "updated cherry one with help",
 			help: "a help value to display"
 		};
-		cherryglass.setCherry(file, id, new_cherry);
-		var cherry = cherryglass.getCherry(file, id);
+		cherryglass.setCherry(file, new_cherry);
+		var cherry = cherryglass.getCherry(file.name, new_cherry.id);
 		cherry.value.should.equal(new_cherry.value);
 		cherry.help.should.equal(new_cherry.help);
 	});
 	
 	it("should add a cherry if it is not present in the data", function(){
+		file = {
+			name: "fixture-page-one.html"
+		};
 		new_cherry = {
 			id: "cherry-three",
 			value: "a newly added cherry called three",
 		};
-		cherryglass.setCherry(file, new_cherry.id, new_cherry);
-		var cherry = cherryglass.getCherry(file, id);
-		cherry.should.have.property("id", id);
+		cherryglass.setCherry(file, new_cherry);
+		var cherry = cherryglass.getCherry(file.name, new_cherry.id);
+		cherry.should.have.property("id", new_cherry.id);
 	});
 	
-
+	it("should add a fle object to the data store if it doesn not exist", function(){
+		file = {
+			name : "file-four.html",
+			title : "File four"
+		};
+		new_cherry = {
+			id: "cherry-three",
+			value: "a newly added cherry called three",
+		};
+		cherryglass.setCherry(file, new_cherry);
+		cherryglass.data.files[file.name].should.have.property("pagetitle", file.title);
+	});
+	
 
 	it("should update a collection entry");
 	
@@ -135,31 +190,6 @@ describe('cherryglass.setCherry()', function(){
 });
 
 
-describe("cherryglass.setFile()", function(){
-
-	var existing_file, new_file, title;
-	setup(function(){
-		cherryglass.loadData("test/fixtures/test.json");
-		existing_file = "fixture-page-two.html";
-		new_file = "fixture-page-three.html";
-	});
-
-	it("should do nothing if a file is already in the json", function(){
-		cherryglass.setFile(existing_file, "a different title");
-		cherryglass.data.files[existing_file].should.have.property("pagetitle","Fixture page two");
-	});
-
-	it("should add a file to the json if it not currently present ", function(){
-		cherryglass.setFile(new_file, "Fixture page three is new");
-		cherryglass.data.files[new_file].should.have.property("pagetitle","Fixture page three is new");
-	});
-
-	it("should enter an html file's title into the json");
-	
-	
-	
-
-});
 
 
 /*
