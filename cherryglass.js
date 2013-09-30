@@ -20,6 +20,12 @@ var cherryglass = {
 			site_dir : "/../site",
 			data_file : "/data.json"
 		},
+		attr : {
+			'text': 'value',
+			'blob': 'value',
+			'markdown': 'value',
+			'href': 'href'
+		},
 		files : {}
 	}
 };
@@ -124,21 +130,13 @@ cherryglass.contentSubmission = function(req, res){
 
 	var file = req.params[0];
 
-	// map the submitted form attribtes to cherry attributes in the model
-	var attr = {
-		'text': 'value',
-		'blob': 'value',
-		'markdown': 'value',
-		'href': 'href',
-	};
-
 	// inspect each field posted from the form
 	for(var node in req.body) {
 		var type = node.split(":")[0];
 		var id = node.split(":")[1];
 		var cherry = {};
 		console.log("node" , req.body[node]);
-		cherry[attr[type]] = req.body[node];
+		cherry[cherryglass.data.attr[type]] = req.body[node];
 		cherryglass.setCherry(file, id, cherry);
 	}
 
@@ -147,43 +145,8 @@ cherryglass.contentSubmission = function(req, res){
 };
 
 
-/**
-*	lodge an element in the model for management
-*
-*  @param {String} file
-*  @param {String} title
-*  @param {Object} data
-*/
-cherryglass.lodge = function(file, title, data) {
-
-	// Defaults to extend.
-	var obj = {
-		"type": null,
-		"id": null,
-		"value": ""
-	};
-	obj = extend(obj, data);
-
-	if(!cherryglass.data.files[file]) {
-		cherryglass.data.files[file] = {"pagetitle": title, "cherries": {}};
-	}
-	cherryglass.data.files[file].cherries[obj.id] = obj;
-	cherryglass.writeData(cherryglass.data.config.data_file);
-};
 
 
-
-
-/**
-*	pluck the data for a cherry from the data store
-*
-* @param {String} file
-* @para, {String} id
-* @return {Object}
-*/
-cherryglass.pluck = function(file, id) {
-	return cherryglass.data.files[file].cherries[id];
-};
 
 
 /*
@@ -258,7 +221,8 @@ cherryglass.pick = function() {
 						// ignore first class cherries which are actually in a collection
 						var collection_member = $(this).parents('[data-cherry-type=collection]');
 						if(collection_member.length === 0) {
-							cherryglass.lodge(file.replace(__dirname + cherryglass.data.config.src_dir + "/", ""), title, cherry_obj);
+							cherryglass.setCherry(file.replace(__dirname + cherryglass.data.config.src_dir + "/", ""), cherry_obj.id, cherry_obj);
+							cherryglass.writeData(cherryglass.data.config.data_file);
 						}
 
 					});
@@ -313,11 +277,9 @@ cherryglass.inject = function() {
 	var out_dir = __dirname + cherryglass.data.config.site_dir + "/";
 
 	fs.readdir(out_dir, function(err, files) {
-
 		if (err) {
 			return console.error(err);
 		}
-
 		files.filter( function(file) {
 			return file.substr(-5) == '.html';
 		})
@@ -328,23 +290,18 @@ cherryglass.inject = function() {
 				var $ = cheerio.load(contents);
 
 				// parse a data cherry and replace its content with that found in the model.
-				// also remove the data-cherry attributes to eliminate any smells
 				$('[data-cherry-id]').each(function(i, elem) {
-					var cherrytag = {
-						id: $(this).attr('data-cherry-id'),
-						type: $(this).attr('data-cherry-type')
-					};
-					var data = cherryglass.pluck(file, cherrytag.id);
+					cherryid = $(this).attr('data-cherry-id');
+					cherry = cherryglass.getCherry(file, cherryid);
 
-					// markdown or text or link
-					if(cherrytag.type == 'markdown') {
-						data = marked(data.value);
-						$(this).html(data);
-					} else if (cherrytag.type == 'link') {
-						$(this).text(data.value);
-						$(this).attr('href', data.href );
-					} else {
-						$(this).text(data.value);
+					// output the correct format for this element type
+					if("text" == cherry.type) {
+						$(this).text(cherry.value);
+					} else if ("link" == cherry.type) {
+						$(this).text(cherry.value);
+						$(this).attr('href', cherry.href );
+					} else if('markdown' == cherry.type) {
+						$(this).html(marked(cherry.value));
 					}
 
 					// clean up so that we leave no smells in the markup
@@ -389,7 +346,7 @@ cherryglass.generate = function(req, res){
 					cherryglass.inject();
 				});
 
-		 });
+		});
 	} else {
 		ncp(source_dir, out_dir, function (err) {
 			if (err) {
@@ -415,6 +372,51 @@ cherryglass.getCherry = function(file, id, entry) {
 };
 
 
+
+
+
+/**
+*	lodge an element in the model for management
+*
+*  @param {String} file
+*  @param {String} title
+*  @param {Object} data
+*/
+cherryglass.lodge = function(file, title, data) {
+
+	// Defaults to extend.
+	var obj = {
+		"type": null,
+		"id": null,
+		"value": ""
+	};
+	obj = extend(obj, data);
+
+	if(!cherryglass.data.files[file]) {
+		cherryglass.data.files[file] = {"pagetitle": title, "cherries": {}};
+	}
+	cherryglass.data.files[file].cherries[obj.id] = obj;
+	cherryglass.writeData(cherryglass.data.config.data_file);
+};
+
+
+/**
+* setFile : add a new file into the json data
+*
+* @param {String} file
+* @param {String} title
+*/
+cherryglass.setFile = function(file, title) {
+	if(cherryglass.data.files[file] === undefined){
+		cherryglass.data.files[file] = {
+			"cherries" : {},
+			"pagetitle" : title ? title : file
+		};
+	}
+};
+
+
+
 /**
 * setCherry : set the cherry data in the store*
 * The optional entry parameter alows us to access child cherries in collections.
@@ -427,7 +429,14 @@ cherryglass.getCherry = function(file, id, entry) {
 */
 cherryglass.setCherry = function(file, id, cherry, entry) {
 	var target = cherryglass.data.files[file].cherries[id];
-	target = extend(target, cherry);
+	if(!target) {
+		cherryglass.data.files[file].cherries[id] = cherry;
+	} else {
+		target = extend(target, cherry);
+	}
+	
+
+	// cherryglass.writeData(cherryglass.data.config.data_file);
 };
 
 
@@ -438,7 +447,7 @@ cherryglass.setCherry = function(file, id, cherry, entry) {
 */
 cherryglass.loadData = function(file) {
 	var contents = fs.readFileSync(__dirname + "/" + file, 'utf-8');
-	cherryglass.data.files = JSON.parse(contents);
+	cherryglass.data = JSON.parse(contents);
 };
 
 
@@ -448,7 +457,7 @@ cherryglass.loadData = function(file) {
 * @param {String} file
 */
 cherryglass.writeData = function(file) {
-	var path = __dirname + file;
+	var path = __dirname + "/" + file;
 	var data = JSON.stringify(cherryglass.data);
 	fs.writeFile(path, data, function (err) {
 		if (err) throw err;
@@ -461,7 +470,7 @@ module.exports = cherryglass;
 
 
 /*
-	 Define routes
+	Define routes
 */
 app.get('/cms', cherryglass.admin);
 app.get('/cms/page/*', cherryglass.showDataForm);
