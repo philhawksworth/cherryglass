@@ -191,44 +191,42 @@ describe('cherryglass.setCherry()', function(){
 
 describe("cherryglass.inspect()", function() {
 
-	it("should return an object with no cherries when none are found", function(){
-		var obj = cherryglass.inspect("<p>foo</p>");
-		var t = typeof obj;
-		t.should.equal("object");
-		obj.should.have.property("cherries");
+	it("should return an empty array when no cherries are found", function(){
+		var chs = cherryglass.inspect("<p>foo</p>");
+		chs.should.have.property("length", 0);
 	});
 	
 	it("should detect data-cherry-id attributes and return a cherry", function(){
-		var obj = cherryglass.inspect("<p data-cherry-id='foo-cherry'>foo</p>");
-		obj.cherries.should.have.property("foo-cherry");
+		var chs = cherryglass.inspect("<p data-cherry-id='foo-cherry'>foo</p>");
+		chs[0].id.should.equal("foo-cherry");
 	});
 	
 	it("should detect data-cherry-id attributes and return a cherry with the inner html as the value", function(){
-		var obj = cherryglass.inspect("<p data-cherry-id='foo-cherry'>foo</p>");
-		obj.cherries['foo-cherry'].should.have.property("value", "foo");
+		var chs = cherryglass.inspect("<p data-cherry-id='foo-cherry'>foo</p>");
+		chs[0].value.should.equal("foo");
 	});
 
 	it("should detect data-cherry-id and data-cherry-type attributes and return a cherry with the correct properties", function(){
-		var obj = cherryglass.inspect("<p data-cherry-id='foo-cherry' data-cherry-type='the-type'>foo</p>");
-		obj.cherries['foo-cherry'].should.have.property("type", "the-type");
+		var chs = cherryglass.inspect("<p data-cherry-id='foo-cherry' data-cherry-type='the-type'>foo</p>");
+		chs[0].type.should.equal("the-type");
 	});
 
 	it("should detect data-cherry-id and data-cherry-label attributes and return a cherry with the correct properties", function(){
-		var obj = cherryglass.inspect("<p data-cherry-id='foo-cherry' data-cherry-label='the label'>foo</p>");
-		obj.cherries['foo-cherry'].should.have.property("label", "the label");
+		var chs = cherryglass.inspect("<p data-cherry-id='foo-cherry' data-cherry-label='the label'>foo</p>");
+		chs[0].label.should.equal("the label");
 	});
 
 	it("should detect data-cherry-id and data-cherry-help attributes and return a cherry with the correct properties", function(){
-		var obj = cherryglass.inspect("<p data-cherry-id='foo-cherry' data-cherry-help='some help text'>foo</p>");
-		obj.cherries['foo-cherry'].should.have.property("help", "some help text");
+		var chs = cherryglass.inspect("<p data-cherry-id='foo-cherry' data-cherry-help='some help text'>foo</p>");
+		chs[0].help.should.equal("some help text");
 	});
 
 	it("should add an href attribute to cherries which are of the type, link", function(){
-		var obj = cherryglass.inspect("<a data-cherry-id='foo-cherry' data-cherry-type='link' href='link-url'>link text</a>");
-		obj.cherries['foo-cherry'].should.have.property("href", "link-url");
-		obj.cherries['foo-cherry'].should.have.property("value", "link text");
+		var chs = cherryglass.inspect("<a data-cherry-id='foo-cherry' data-cherry-type='link' href='link-url'>link text</a>");
+		chs[0].href.should.equal("link-url");
+		chs[0].value.should.equal("link text");
 	});
-	
+
 });
 
 
